@@ -6,7 +6,7 @@
 /*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 15:45:16 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/03 18:50:41 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/04 17:48:05 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@
 # include <errno.h>
 # include <mlx.h>
 
-typedef struct s_data
+# define mapR 10
+# define mapC 15
+
+typedef struct	s_data
 {
 	void		*img;
 	char		*add;
@@ -29,5 +32,17 @@ typedef struct s_data
 	int			pixel;
 	int			len;
 }				t_data;
+
+typedef struct	s_pos
+{
+	double		posX;
+	double		posY;
+	double		dirX;
+	double		dirY;
+	double		pianoX;
+	double		pianoY;
+	double		timefps;
+	double		oldtime;
+}				t_pos;
 
 #endif
