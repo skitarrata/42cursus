@@ -6,7 +6,7 @@
 /*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 15:45:16 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/04 17:48:05 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/08 17:32:08 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,14 @@
 
 # define mapR 10
 # define mapC 15
+# define resolutionX 1920
+# define resolutionY 1080
 
 typedef struct	s_data
 {
 	void		*img;
+	void 		*mlx;
+	void 		*ide_win;	
 	char		*add;
 	int			endian;
 	int			pixel;
@@ -43,6 +47,25 @@ typedef struct	s_pos
 	double		pianoY;
 	double		timefps;
 	double		oldtime;
+
+	double 		cameraX;
+    double		rayDirX; //raggio laser
+    double		rayDirY;
+	int			mapX; //casella mappa
+    int			mapY;
+	double 		sideDistX; //distanza dalla posizione iniziale del raggio (pos) al primo lato o destro o sinistro, dip dalla componente del raggio
+    double 		sideDistY; 
+
+	double 		deltaDistX; // distanza che il raggio deve percorrere per andare da 1 lato x al successivo lato x, viceversa
+    double 		deltaDistY;
+    double 		perpWallDist; //verrà utilizzata per calcolare la lunghezza del raggio
+	int 		stepX; //controllo delle componenti
+    int 		stepY;
+
+    int 		side; //ci serve per capire su quale lato abbiamo colpito il muro
+	int			lineHeight;
+	int			drawStart;
+	int			drawEnd;
 }				t_pos;
 
 #endif
