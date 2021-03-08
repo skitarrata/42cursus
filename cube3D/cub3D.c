@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: grusso <grusso@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 18:31:26 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/08 17:32:07 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/08 19:04:31 by grusso           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ int map[mapR][mapC] =
 {
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,1,0,0,0,1},
-	{1,0,0,0,0,0,0,0,0,0,0,1,0,0,1},
+	{1,0,3,0,0,0,0,0,0,0,1,0,0,0,1},
+	{1,0,0,0,0,0,2,2,0,0,0,1,0,0,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,1,0,1},
-	{1,0,0,1,0,0,0,0,0,0,0,0,0,0,1},
+	{1,0,3,1,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,1,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,1,0,0,0,0,0,0,0,0,0,0,1},
 	{1,0,0,1,0,0,0,0,0,0,0,0,0,0,1},
@@ -40,8 +40,17 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
     char    *dst;
 
-    dst = data->add + (y * data->len + x * (data->pixel / 8));
+    dst = data->addr + (y * data->len + x * (data->pixel / 8));
     *(unsigned int*)dst = color;
+}
+
+void	ft_verLine(int x, t_data *img, t_pos *pos)
+{
+	int y = pos->drawStart;
+
+	while (y <= pos->drawEnd){
+		my_mlx_pixel_put(img, x, y++, pos->color);
+		mlx_put_image_to_window(img->mlx, img->ide_win, img->img, 0, 0);}
 }
 
 int	press_button(int button, t_data *img)
@@ -122,6 +131,25 @@ int	press_button(int button, t_data *img)
 		pos.drawEnd = pos.lineHeight / 2 + resolutionY / 2; 
       	if (pos.drawEnd >= resolutionY)
 			pos.drawEnd = resolutionY - 1;
+		
+		//scelta colore muro
+		if (map[pos.mapX][pos.mapY])
+		{
+			int i = map[pos.mapX][pos.mapY];
+			if (i == 1)
+				pos.color = 0x00ff0000; //red
+			else if (i == 2)
+				pos.color = 0x0000ff00; //gree
+			else if (i == 3)
+				pos.color = 0x000000ff; //blue
+			else if (i == 4)
+				pos.color = 0x00ffffff; //white
+			else if (i == 5)
+				pos.color = 0x00ffff00; //yellow
+		}
+		if (pos.side == 1) 
+			pos.color = pos.color / 2; //luminositá colore
+		ft_verLine(x, img, &pos);
 		x++;
 	}
 	printf("%d\n", button);
@@ -134,6 +162,8 @@ int	main (void)
 
 	img.mlx = mlx_init();
 	img.ide_win = mlx_new_window(img.mlx, resolutionX, resolutionY, "game");
+	img.img = mlx_new_image(img.mlx, resolutionX, resolutionY);
+	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
 	mlx_key_hook(img.ide_win, press_button, &img);
 	mlx_loop(img.mlx);
 

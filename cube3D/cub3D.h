@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: grusso <grusso@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 15:45:16 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/08 17:32:08 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/08 18:37:01 by grusso           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,9 @@ typedef struct	s_data
 	void		*img;
 	void 		*mlx;
 	void 		*ide_win;	
-	char		*add;
+	char		*addr;
+	int			bits_per_pixel;
+	int			line_length;
 	int			endian;
 	int			pixel;
 	int			len;
@@ -66,6 +68,8 @@ typedef struct	s_pos
 	int			lineHeight;
 	int			drawStart;
 	int			drawEnd;
+
+	int			color;
 }				t_pos;
 
 #endif
