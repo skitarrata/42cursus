@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: grusso <grusso@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 15:45:16 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/10 15:48:06 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/10 16:18:35 by grusso           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 # include <errno.h>
 # include <mlx.h>
 
-# define mapR 10
-# define mapC 15
+# define mapR 24
+# define mapC 24
 # define resolutionX 1920
 # define resolutionY 1080
 
@@ -31,10 +31,10 @@ typedef struct	s_data
 	void		*img;
 	void 		*mlx;
 	void 		*ide_win;	
-	char		*add;
+	char		*addr;
 	int			endian;
-	int			pixel;
-	int			len;
+	int			bits_per_pixel;
+	int			line_length;
 }				t_data;
 
 typedef struct	s_pos
@@ -64,6 +64,8 @@ typedef struct	s_pos
 	int			lineHeight; // lunghezza da disegnare
 	int			drawStart; // punto in cui inizio a colorare
 	int			drawEnd; //punto in cui finisco di colorare
+
+	int			color;
 }				t_pos;
 
 #endif
