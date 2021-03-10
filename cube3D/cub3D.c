@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: grusso <grusso@student.42.fr>              +#+  +:+       +#+        */
+/*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 18:31:26 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/10 16:14:56 by grusso           ###   ########.fr       */
+/*   Updated: 2021/03/10 17:57:19 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int map[mapR][mapC]=
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
 
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
+void	my_mlx_pixel_put(t_pos *data, int x, int y, int color)
 {
     char    *dst;
 
@@ -48,16 +48,22 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
     *(unsigned int*)dst = color;
 }
 
-void	ft_verLine(int x, t_data *img, t_pos *pos)
+void	ft_verLine(int x, t_pos *pos)
 {
 	int y = pos->drawStart;
+	int sky = 0;
+	int floor = pos->drawEnd + 1;
 
+	while (sky < y)
+		my_mlx_pixel_put(pos, x, sky++, 0x00964b00);
 	while (y <= pos->drawEnd)
-		my_mlx_pixel_put(img, x, y++, pos->color);
-	mlx_put_image_to_window(img->mlx, img->ide_win, img->img, 0, 0);
+		my_mlx_pixel_put(pos, x, y++, pos->color);
+	while (floor < resolutionY)
+		my_mlx_pixel_put(pos, x, floor++, 0x00ea899a);
+	mlx_put_image_to_window(pos->mlx, pos->ide_win, pos->img, 0, 0);
 }
 
-static void ft_calcolate(t_pos *pos, t_data *img)
+static void ft_calcolate(t_pos *pos)
 {
 	int x = 0;
 
@@ -146,12 +152,12 @@ static void ft_calcolate(t_pos *pos, t_data *img)
 		}
 		if (pos->side == 1)
 			pos->color = pos->color / 2; //luminositá colore
-		ft_verLine(x, img, pos);
+		ft_verLine(x, pos);
 		x++;
 	}
 }
 
-void	first_pos(t_pos *pos, t_data *img)
+void	first_pos(t_pos *pos)
 {
 	pos->posX = 22;
 	pos->posY = 12;
@@ -159,7 +165,7 @@ void	first_pos(t_pos *pos, t_data *img)
 	pos->dirY = 0;
 	pos->pianoX = 0;
 	pos->pianoY = 0.66;
-	ft_calcolate(pos, img);
+	ft_calcolate(pos);
 }
 
 static void	move_W(t_pos *pos)
@@ -186,11 +192,11 @@ static void	move_A(t_pos *pos)
 	double oldPlaneX;
 
 	oldDirX = pos->dirX;
-    pos->dirX = pos->dirX * cos(3.0) - pos->dirY * sin(3.0);
-    pos->dirY = oldDirX * sin(3.0) + pos->dirY * cos(3.0);
+    pos->dirX = pos->dirX * cos(-25.0) - pos->dirY * sin(-25.0);
+    pos->dirY = oldDirX * sin(-25.0) + pos->dirY * cos(-25.0);
     oldPlaneX = pos->pianoX;
-    pos->pianoX = pos->pianoX * cos(3.0) - pos->pianoY * sin(3.0);
-    pos->pianoY = oldPlaneX * sin(3.0) + pos->pianoY * cos(3.0);
+    pos->pianoX = pos->pianoX * cos(-25.0) - pos->pianoY * sin(-25.0);
+    pos->pianoY = oldPlaneX * sin(-25.0) + pos->pianoY * cos(-25.0);
 }
 
 static void	move_D(t_pos *pos)
@@ -199,21 +205,20 @@ static void	move_D(t_pos *pos)
 	double oldPlaneX;
 
 	oldDirX = pos->dirX;
-    pos->dirX = pos->dirX * cos(-3.0) - pos->dirY * sin(-3.0);
-    pos->dirY = oldDirX * sin(-3.0) + pos->dirY * cos(-3.0);
+    pos->dirX = pos->dirX * cos(25.0) - pos->dirY * sin(25.0);
+    pos->dirY = oldDirX * sin(25.0) + pos->dirY * cos(25.0);
     oldPlaneX = pos->pianoX;
-    pos->pianoX = pos->pianoX * cos(-3.0) - pos->pianoY * sin(-3.0);
-    pos->pianoY = oldPlaneX * sin(-3.0) + pos->pianoY * cos(-3.0);
+    pos->pianoX = pos->pianoX * cos(25.0) - pos->pianoY * sin(25.0);
+    pos->pianoY = oldPlaneX * sin(25.0) + pos->pianoY * cos(25.0);
 }
 
-int	press_button(int button, t_pos *pos, t_data *img)
+int	press_button(int button, t_pos *pos)
 {
 	if (button == 53)
 	{
-		mlx_destroy_window(img->mlx, img->ide_win);
+		mlx_destroy_window(pos->mlx, pos->ide_win);
 		return (0);
 	}
-	// mi muovo nella mappa
 	if (button == 13)
 		move_W(pos);
 	else if (button == 0)
@@ -222,23 +227,22 @@ int	press_button(int button, t_pos *pos, t_data *img)
 		move_S(pos);
 	else if (button == 2)
 		move_D(pos);
-	ft_calcolate(pos, img);
+	ft_calcolate(pos);
 	printf("%d\n", button);
 	return (1);
 }
 
 int	main (void)
 {
-	t_data 	img;
 	t_pos	pos;
 
-	img.mlx = mlx_init();
-	img.ide_win = mlx_new_window(img.mlx, resolutionX, resolutionY, "game");
-	img.img = mlx_new_image(img.mlx, resolutionX, resolutionY);
-    img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
-	first_pos(&pos, &img);
-	mlx_key_hook(img.ide_win, press_button, &img);
-	mlx_loop(img.mlx);
+	pos.mlx = mlx_init();
+	pos.ide_win = mlx_new_window(pos.mlx, resolutionX, resolutionY, "game");
+	pos.img = mlx_new_image(pos.mlx, resolutionX, resolutionY);
+    pos.addr = mlx_get_data_addr(pos.img, &pos.bits_per_pixel, &pos.line_length, &pos.endian);
+	first_pos(&pos);
+	mlx_key_hook(pos.ide_win, press_button, &pos);
+	mlx_loop(pos.mlx);
 
 	//printf("%s\n", "casa");
 	//img.img = mlx_new_image(mlx, 1920, 1080);
