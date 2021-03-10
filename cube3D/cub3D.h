@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: grusso <grusso@student.42.fr>              +#+  +:+       +#+        */
+/*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 15:45:16 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/08 18:37:01 by grusso           ###   ########.fr       */
+/*   Updated: 2021/03/10 15:48:06 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,7 @@ typedef struct	s_data
 	void		*img;
 	void 		*mlx;
 	void 		*ide_win;	
-	char		*addr;
-	int			bits_per_pixel;
-	int			line_length;
+	char		*add;
 	int			endian;
 	int			pixel;
 	int			len;
@@ -47,8 +45,6 @@ typedef struct	s_pos
 	double		dirY;
 	double		pianoX;
 	double		pianoY;
-	double		timefps;
-	double		oldtime;
 
 	double 		cameraX;
     double		rayDirX; //raggio laser
@@ -65,11 +61,9 @@ typedef struct	s_pos
     int 		stepY;
 
     int 		side; //ci serve per capire su quale lato abbiamo colpito il muro
-	int			lineHeight;
-	int			drawStart;
-	int			drawEnd;
-
-	int			color;
+	int			lineHeight; // lunghezza da disegnare
+	int			drawStart; // punto in cui inizio a colorare
+	int			drawEnd; //punto in cui finisco di colorare
 }				t_pos;
 
 #endif
