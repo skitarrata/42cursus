@@ -6,7 +6,7 @@
 /*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 15:45:16 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/10 17:05:50 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/10 19:20:48 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,10 @@
 
 # define mapR 24
 # define mapC 24
-# define resolutionX 640
-# define resolutionY 480
+# define resolutionX 1920
+# define resolutionY 1080
+# define SPEEDMOVE 0.3
+# define ROTATESPEED 0.1
 
 typedef struct	s_pos
 {
@@ -36,6 +38,7 @@ typedef struct	s_pos
 	int			endian;
 	int			bits_per_pixel;
 	int			line_length;
+	int			keyboard[256];
 
 	double		posX;
 	double		posY;

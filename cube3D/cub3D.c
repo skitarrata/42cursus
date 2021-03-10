@@ -6,7 +6,7 @@
 /*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 18:31:26 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/10 17:57:19 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/10 19:18:28 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,33 +157,50 @@ static void ft_calcolate(t_pos *pos)
 	}
 }
 
+int ft_key_hit(int keycode, t_pos *pos)
+{
+    pos->keyboard[keycode] = 1;
+	//printf("%d\n", keycode);
+    return (0);
+}
+
+int ft_key_release(int keycode, t_pos *pos)
+{
+    pos->keyboard[keycode] = 0;
+    return (0);
+}
+
 void	first_pos(t_pos *pos)
 {
+	int i = 0;
+
 	pos->posX = 22;
 	pos->posY = 12;
 	pos->dirX = -1;
 	pos->dirY = 0;
 	pos->pianoX = 0;
 	pos->pianoY = 0.66;
+	while (i < 100)
+		pos->keyboard[i++] = 0;
 	ft_calcolate(pos);
 }
 
 static void	move_W(t_pos *pos)
 {
 	if (map[(int)(pos->posX + pos->dirX)] [(int)pos->posY] == 0)
-		pos->posX += pos->dirX;
+		pos->posX += pos->dirX * SPEEDMOVE;
     if (map[(int)pos->posX] [(int)(pos->posY + pos->dirY)] == 0)
-		pos->posY += pos->dirY;
-	printf("%f\n", pos->posX);
-	printf("%f\n", pos->posY);
+		pos->posY += pos->dirY * SPEEDMOVE;
+	//printf("%f\n", pos->posX);
+	//printf("%f\n", pos->posY);
 }
 
 static void	move_S(t_pos *pos)
 {
 	if (map[(int)(pos->posX - pos->dirX)] [(int)pos->posY] == 0)
-		pos->posX -= pos->dirX;
+		pos->posX -= pos->dirX * SPEEDMOVE;
     if (map[(int)pos->posX] [(int)(pos->posY - pos->dirY)] == 0)
-		pos->posY -= pos->dirY;
+		pos->posY -= pos->dirY * SPEEDMOVE;
 }
 
 static void	move_A(t_pos *pos)
@@ -192,11 +209,11 @@ static void	move_A(t_pos *pos)
 	double oldPlaneX;
 
 	oldDirX = pos->dirX;
-    pos->dirX = pos->dirX * cos(-25.0) - pos->dirY * sin(-25.0);
-    pos->dirY = oldDirX * sin(-25.0) + pos->dirY * cos(-25.0);
+    pos->dirX = pos->dirX * cos(ROTATESPEED / 2) - pos->dirY * sin(ROTATESPEED / 2);
+    pos->dirY = oldDirX * sin(ROTATESPEED / 2) + pos->dirY * cos(ROTATESPEED / 2);
     oldPlaneX = pos->pianoX;
-    pos->pianoX = pos->pianoX * cos(-25.0) - pos->pianoY * sin(-25.0);
-    pos->pianoY = oldPlaneX * sin(-25.0) + pos->pianoY * cos(-25.0);
+    pos->pianoX = pos->pianoX * cos(ROTATESPEED / 2) - pos->pianoY * sin(ROTATESPEED / 2);
+    pos->pianoY = oldPlaneX * sin(ROTATESPEED / 2) + pos->pianoY * cos(ROTATESPEED / 2);
 }
 
 static void	move_D(t_pos *pos)
@@ -205,31 +222,30 @@ static void	move_D(t_pos *pos)
 	double oldPlaneX;
 
 	oldDirX = pos->dirX;
-    pos->dirX = pos->dirX * cos(25.0) - pos->dirY * sin(25.0);
-    pos->dirY = oldDirX * sin(25.0) + pos->dirY * cos(25.0);
+    pos->dirX = pos->dirX * cos(-ROTATESPEED / 2) - pos->dirY * sin(-ROTATESPEED / 2);
+    pos->dirY = oldDirX * sin(-ROTATESPEED / 2) + pos->dirY * cos(-ROTATESPEED / 2);
     oldPlaneX = pos->pianoX;
-    pos->pianoX = pos->pianoX * cos(25.0) - pos->pianoY * sin(25.0);
-    pos->pianoY = oldPlaneX * sin(25.0) + pos->pianoY * cos(25.0);
+    pos->pianoX = pos->pianoX * cos(-ROTATESPEED / 2) - pos->pianoY * sin(-ROTATESPEED / 2);
+    pos->pianoY = oldPlaneX * sin(-ROTATESPEED / 2) + pos->pianoY * cos(-ROTATESPEED / 2);
 }
 
-int	press_button(int button, t_pos *pos)
+int	press_button(t_pos *pos)
 {
-	if (button == 53)
+	/* if (button == 53)
 	{
 		mlx_destroy_window(pos->mlx, pos->ide_win);
 		return (0);
-	}
-	if (button == 13)
+	} */
+	if (pos->keyboard[13])
 		move_W(pos);
-	else if (button == 0)
+	else if (pos->keyboard[0])
 		move_A(pos);
-	else if (button == 1)
+	else if (pos->keyboard[1])
 		move_S(pos);
-	else if (button == 2)
+	else if (pos->keyboard[2])
 		move_D(pos);
 	ft_calcolate(pos);
-	printf("%d\n", button);
-	return (1);
+	return (0);
 }
 
 int	main (void)
@@ -237,11 +253,13 @@ int	main (void)
 	t_pos	pos;
 
 	pos.mlx = mlx_init();
-	pos.ide_win = mlx_new_window(pos.mlx, resolutionX, resolutionY, "game");
+	pos.ide_win = mlx_new_window(pos.mlx, resolutionX, resolutionY, "cub3D");
 	pos.img = mlx_new_image(pos.mlx, resolutionX, resolutionY);
     pos.addr = mlx_get_data_addr(pos.img, &pos.bits_per_pixel, &pos.line_length, &pos.endian);
 	first_pos(&pos);
-	mlx_key_hook(pos.ide_win, press_button, &pos);
+	mlx_hook(pos.ide_win, 2, (1L << 0), ft_key_hit, &pos);
+	mlx_hook(pos.ide_win, 3, (1L << 1), ft_key_release, &pos);
+	mlx_loop_hook(pos.mlx, press_button, &pos);
 	mlx_loop(pos.mlx);
 
 	//printf("%s\n", "casa");
