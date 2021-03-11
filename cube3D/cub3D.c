@@ -6,7 +6,7 @@
 /*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 18:31:26 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/10 19:18:28 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/11 15:34:28 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,13 @@ int map[mapR][mapC]=
   {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
+
+unsigned int buf[texWidth][texHeight];
+
+static void load_tex(t_pos *pos)
+{
+	unsigned int texture[8]; 
+}
 
 void	my_mlx_pixel_put(t_pos *data, int x, int y, int color)
 {
