@@ -6,7 +6,7 @@
 /*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 15:45:16 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/10 19:20:48 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/11 15:39:05 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # define mapC 24
 # define resolutionX 1920
 # define resolutionY 1080
+# define texWidth 64
+# define texHeight 64
 # define SPEEDMOVE 0.3
 # define ROTATESPEED 0.1
 
