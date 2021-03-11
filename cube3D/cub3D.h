@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: grusso <grusso@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 15:45:16 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/11 17:12:33 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/11 17:49:51 by grusso           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@
 # include <fcntl.h>
 # include <math.h>
 # include <errno.h>
-# include <mlx.h>
+# include "minilibx_mms_20200219/mlx.h"
 
 # define mapR 24
 # define mapC 24
 # define resolutionX 620
 # define resolutionY 480
-# define texWidth 64
-# define texHeight 64
+//# define texWidth 64
+//# define texHeight 64
 # define SPEEDMOVE 0.3
 # define ROTATESPEED 0.1
 

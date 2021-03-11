@@ -3,14 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: grusso <grusso@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 18:31:26 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/11 17:19:45 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/11 17:53:40 by grusso           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
+
+int texWidth = 64;
+int texHeight = 64;
 
 int map[mapR][mapC]=
 {
@@ -40,20 +43,20 @@ int map[mapR][mapC]=
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
 
-unsigned int buf[texWidth][texHeight];
+unsigned int buf[64][64];
 
 static void load_tex(t_pos *pos)
 {
     unsigned int texture[8];
     pos->relative_path = "./texture";
-    texture[0] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
-    texture[1] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
-    texture[2] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
-    texture[3] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
-    texture[4] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
-    texture[5] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
-    texture[6] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
-    texture[7] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
+    texture[0] = mlx_png_file_to_image(pos->mlx, "./texture/eagle.png", &texWidth, &texHeight);
+    texture[1] = mlx_png_file_to_image(pos->mlx, "./texture/redbrick.png", &texWidth, &texHeight);
+    texture[2] = mlx_png_file_to_image(pos->mlx, "./texture/purplestone.png", &texWidth, &texHeight);
+    texture[3] = mlx_png_file_to_image(pos->mlx, "./texture/greystone.png", &texWidth, &texHeight);
+    texture[4] = mlx_png_file_to_image(pos->mlx, "./texture/bluestone.png", &texWidth, &texHeight);
+    texture[5] = mlx_png_file_to_image(pos->mlx, "./texture/mossy.png", &texWidth, &texHeight);
+    texture[6] = mlx_png_file_to_image(pos->mlx, "./texture/wood.png", &texWidth, &texHeight);
+    texture[7] = mlx_png_file_to_image(pos->mlx, "./texture/colorstone.png", &texWidth, &texHeight);
 }
 
 void	my_mlx_pixel_put(t_pos *data, int x, int y, int color)
