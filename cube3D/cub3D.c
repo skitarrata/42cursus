@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: grusso <grusso@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 18:31:26 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/11 15:34:28 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/11 15:50:24 by grusso           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,17 @@ unsigned int buf[texWidth][texHeight];
 
 static void load_tex(t_pos *pos)
 {
-	unsigned int texture[8]; 
+	unsigned int texture[8];
+	pos->relative_path = "./texture";
+
+	texture[0] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
+	texture[1] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
+	texture[2] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
+	texture[3] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
+	texture[4] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
+	texture[5] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
+	texture[6] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
+	texture[7] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
 }
 
 void	my_mlx_pixel_put(t_pos *data, int x, int y, int color)
