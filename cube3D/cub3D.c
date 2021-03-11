@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: grusso <grusso@student.42.fr>              +#+  +:+       +#+        */
+/*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 18:31:26 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/11 15:50:24 by grusso           ###   ########.fr       */
+/*   Updated: 2021/03/11 17:19:45 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,17 +44,16 @@ unsigned int buf[texWidth][texHeight];
 
 static void load_tex(t_pos *pos)
 {
-	unsigned int texture[8];
-	pos->relative_path = "./texture";
-
-	texture[0] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
-	texture[1] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
-	texture[2] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
-	texture[3] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
-	texture[4] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
-	texture[5] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
-	texture[6] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
-	texture[7] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
+    unsigned int texture[8];
+    pos->relative_path = "./texture";
+    texture[0] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
+    texture[1] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
+    texture[2] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
+    texture[3] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
+    texture[4] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
+    texture[5] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
+    texture[6] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
+    texture[7] = mlx_png_file_to_image(pos->mlx, pos->relative_path, texWidth, texHeight);
 }
 
 void	my_mlx_pixel_put(t_pos *data, int x, int y, int color)
@@ -65,7 +64,7 @@ void	my_mlx_pixel_put(t_pos *data, int x, int y, int color)
     *(unsigned int*)dst = color;
 }
 
-void	ft_verLine(int x, t_pos *pos)
+/* void	ft_verLine(int x, t_pos *pos)
 {
 	int y = pos->drawStart;
 	int sky = 0;
@@ -74,11 +73,11 @@ void	ft_verLine(int x, t_pos *pos)
 	while (sky < y)
 		my_mlx_pixel_put(pos, x, sky++, 0x00964b00);
 	while (y <= pos->drawEnd)
-		my_mlx_pixel_put(pos, x, y++, pos->color);
+		my_mlx_pixel_put(pos, x, y, pos->color);
 	while (floor < resolutionY)
 		my_mlx_pixel_put(pos, x, floor++, 0x00ea899a);
 	mlx_put_image_to_window(pos->mlx, pos->ide_win, pos->img, 0, 0);
-}
+} */
 
 static void ft_calcolate(t_pos *pos)
 {
@@ -152,8 +151,40 @@ static void ft_calcolate(t_pos *pos)
       	if (pos->drawEnd >= resolutionY)
 			pos->drawEnd = resolutionY - 1;
 
+		int texNum = map[pos->mapX][pos->mapY] - 1; //valore delle texture ,per richiamarle
+
+		double wallX; //valore esatto del muro quando é stato colpito
+		if(pos->side == 0)
+			wallX = pos->posY + pos->perpWallDist * pos->rayDirY;
+		else
+			wallX = pos->posX + pos->perpWallDist * pos->rayDirX; 
+		wallX -= (int)wallX;
+
+		int texX = (int)(wallX * (double)texWidth); //è la coordinata x della texture, e questa è calcolata da wallX
+		if (pos->side == 0 && pos->rayDirX > 0)
+			texX = texWidth - texX - 1;
+		if (pos->side == 1 && pos->rayDirY < 0)
+			texX = texWidth - texX - 1;
+
+		int y = pos->drawStart;
+		double step = 1.0 * texHeight / pos->lineHeight; //step indica di quanto aumentare le coordinate della texture per ogni pixel nelle coordinate verticali dello schermo
+	  	double texPos = (pos->drawStart - resolutionY / 2 + pos->lineHeight / 2) * step; // Coordinata della texture iniziale
+		while (y < pos->drawEnd)
+		{
+			int texY = (int)texPos & (texHeight - 1); //trasformo la texture posizione Y in intero, in caso di overflow faccio texH -1
+			texPos += step; 
+			pos->color = pos->texture[texNum][texHeight * texY + texX];
+			if (pos->side == 1)
+				pos->color = (pos->color >> 1) & 8355711; //rendo il colore piu scuro
+			my_mlx_pixel_put(pos, x, y, pos->color);
+			mlx_put_image_to_window(pos->mlx, pos->ide_win, pos->img, 0, 0);
+			//ft_verLine(x, pos);
+			//buf[y][x] = pos->color;
+			y++;
+		}
+		//drawBuffer(buffer[0]);
 		//scelta colore muro
-		if (map[pos->mapX][pos->mapY])
+/* 		if (map[pos->mapX][pos->mapY])
 		{
 			int i = map[pos->mapX][pos->mapY];
 			if (i == 1)
@@ -169,7 +200,7 @@ static void ft_calcolate(t_pos *pos)
 		}
 		if (pos->side == 1)
 			pos->color = pos->color / 2; //luminositá colore
-		ft_verLine(x, pos);
+		ft_verLine(x, pos); */
 		x++;
 	}
 }
