@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: grusso <grusso@student.42.fr>              +#+  +:+       +#+        */
+/*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 18:31:26 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/11 17:53:40 by grusso           ###   ########.fr       */
+/*   Updated: 2021/03/11 19:00:29 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
-
-int texWidth = 64;
-int texHeight = 64;
 
 int map[mapR][mapC]=
 {
@@ -47,16 +44,15 @@ unsigned int buf[64][64];
 
 static void load_tex(t_pos *pos)
 {
-    unsigned int texture[8];
-    pos->relative_path = "./texture";
-    texture[0] = mlx_png_file_to_image(pos->mlx, "./texture/eagle.png", &texWidth, &texHeight);
-    texture[1] = mlx_png_file_to_image(pos->mlx, "./texture/redbrick.png", &texWidth, &texHeight);
-    texture[2] = mlx_png_file_to_image(pos->mlx, "./texture/purplestone.png", &texWidth, &texHeight);
-    texture[3] = mlx_png_file_to_image(pos->mlx, "./texture/greystone.png", &texWidth, &texHeight);
-    texture[4] = mlx_png_file_to_image(pos->mlx, "./texture/bluestone.png", &texWidth, &texHeight);
-    texture[5] = mlx_png_file_to_image(pos->mlx, "./texture/mossy.png", &texWidth, &texHeight);
-    texture[6] = mlx_png_file_to_image(pos->mlx, "./texture/wood.png", &texWidth, &texHeight);
-    texture[7] = mlx_png_file_to_image(pos->mlx, "./texture/colorstone.png", &texWidth, &texHeight);
+    //unsigned int texture[8];
+    *pos->texture[0] = mlx_png_file_to_image(pos->mlx, "./texture/eagle.png", &pos->texWidth, &pos->texHeight);
+    *pos->texture[1] = mlx_png_file_to_image(pos->mlx, "./texture/redbrick.png", &pos->texWidth, &pos->texHeight);
+    *pos->texture[2] = mlx_png_file_to_image(pos->mlx, "./texture/purplestone.png", &pos->texWidth, &pos->texHeight);
+    *pos->texture[3] = mlx_png_file_to_image(pos->mlx, "./texture/greystone.png", &pos->texWidth, &pos->texHeight);
+    *pos->texture[4] = mlx_png_file_to_image(pos->mlx, "./texture/bluestone.png", &pos->texWidth, &pos->texHeight);
+    *pos->texture[5] = mlx_png_file_to_image(pos->mlx, "./texture/mossy.png", &pos->texWidth, &pos->texHeight);
+    *pos->texture[6] = mlx_png_file_to_image(pos->mlx, "./texture/wood.png", &pos->texWidth, &pos->texHeight);
+    *pos->texture[7] = mlx_png_file_to_image(pos->mlx, "./texture/colorstone.png", &pos->texWidth, &pos->texHeight);
 }
 
 void	my_mlx_pixel_put(t_pos *data, int x, int y, int color)
@@ -163,20 +159,20 @@ static void ft_calcolate(t_pos *pos)
 			wallX = pos->posX + pos->perpWallDist * pos->rayDirX; 
 		wallX -= (int)wallX;
 
-		int texX = (int)(wallX * (double)texWidth); //è la coordinata x della texture, e questa è calcolata da wallX
+		int texX = (int)(wallX * (double)pos->texWidth); //è la coordinata x della texture, e questa è calcolata da wallX
 		if (pos->side == 0 && pos->rayDirX > 0)
-			texX = texWidth - texX - 1;
+			texX = pos->texWidth - texX - 1;
 		if (pos->side == 1 && pos->rayDirY < 0)
-			texX = texWidth - texX - 1;
+			texX = pos->texWidth - texX - 1;
 
 		int y = pos->drawStart;
-		double step = 1.0 * texHeight / pos->lineHeight; //step indica di quanto aumentare le coordinate della texture per ogni pixel nelle coordinate verticali dello schermo
+		double step = 1.0 * pos->texHeight / pos->lineHeight; //step indica di quanto aumentare le coordinate della texture per ogni pixel nelle coordinate verticali dello schermo
 	  	double texPos = (pos->drawStart - resolutionY / 2 + pos->lineHeight / 2) * step; // Coordinata della texture iniziale
 		while (y < pos->drawEnd)
 		{
-			int texY = (int)texPos & (texHeight - 1); //trasformo la texture posizione Y in intero, in caso di overflow faccio texH -1
+			int texY = (int)texPos & (pos->texHeight - 1); //trasformo la texture posizione Y in intero, in caso di overflow faccio texH -1
 			texPos += step; 
-			pos->color = pos->texture[texNum][texHeight * texY + texX];
+			pos->color = pos->texture[texNum][pos->texHeight * texY + texX];
 			if (pos->side == 1)
 				pos->color = (pos->color >> 1) & 8355711; //rendo il colore piu scuro
 			my_mlx_pixel_put(pos, x, y, pos->color);
@@ -231,8 +227,11 @@ void	first_pos(t_pos *pos)
 	pos->dirY = 0;
 	pos->pianoX = 0;
 	pos->pianoY = 0.66;
+	pos->texWidth = 64;
+	pos->texHeight = 64;
 	while (i < 100)
 		pos->keyboard[i++] = 0;
+	load_tex(pos);
 	ft_calcolate(pos);
 }
 
