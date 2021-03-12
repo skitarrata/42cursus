@@ -6,7 +6,7 @@
 /*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 18:31:26 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/11 19:00:29 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/12 16:42:08 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,18 @@ int map[mapR][mapC]=
 
 unsigned int buf[64][64];
 
-static void load_tex(t_pos *pos)
+static void load_tex(int n, t_pos *pos)
 {
+
     //unsigned int texture[8];
-    *pos->texture[0] = mlx_png_file_to_image(pos->mlx, "./texture/eagle.png", &pos->texWidth, &pos->texHeight);
+/*     *pos->texture[0] = mlx_png_file_to_image(pos->mlx, "./texture/eagle.png", &pos->texWidth, &pos->texHeight);
     *pos->texture[1] = mlx_png_file_to_image(pos->mlx, "./texture/redbrick.png", &pos->texWidth, &pos->texHeight);
     *pos->texture[2] = mlx_png_file_to_image(pos->mlx, "./texture/purplestone.png", &pos->texWidth, &pos->texHeight);
     *pos->texture[3] = mlx_png_file_to_image(pos->mlx, "./texture/greystone.png", &pos->texWidth, &pos->texHeight);
     *pos->texture[4] = mlx_png_file_to_image(pos->mlx, "./texture/bluestone.png", &pos->texWidth, &pos->texHeight);
     *pos->texture[5] = mlx_png_file_to_image(pos->mlx, "./texture/mossy.png", &pos->texWidth, &pos->texHeight);
     *pos->texture[6] = mlx_png_file_to_image(pos->mlx, "./texture/wood.png", &pos->texWidth, &pos->texHeight);
-    *pos->texture[7] = mlx_png_file_to_image(pos->mlx, "./texture/colorstone.png", &pos->texWidth, &pos->texHeight);
+    *pos->texture[7] = mlx_png_file_to_image(pos->mlx, "./texture/colorstone.png", &pos->texWidth, &pos->texHeight); */
 }
 
 void	my_mlx_pixel_put(t_pos *data, int x, int y, int color)
@@ -171,7 +172,8 @@ static void ft_calcolate(t_pos *pos)
 		while (y < pos->drawEnd)
 		{
 			int texY = (int)texPos & (pos->texHeight - 1); //trasformo la texture posizione Y in intero, in caso di overflow faccio texH -1
-			texPos += step; 
+			texPos += step;
+			load_tex(texNum, pos); //fare a casa
 			pos->color = pos->texture[texNum][pos->texHeight * texY + texX];
 			if (pos->side == 1)
 				pos->color = (pos->color >> 1) & 8355711; //rendo il colore piu scuro
@@ -231,7 +233,7 @@ void	first_pos(t_pos *pos)
 	pos->texHeight = 64;
 	while (i < 100)
 		pos->keyboard[i++] = 0;
-	load_tex(pos);
+	//load_tex(pos);
 	ft_calcolate(pos);
 }
 
