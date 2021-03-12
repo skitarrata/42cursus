@@ -6,7 +6,7 @@
 /*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 18:31:26 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/12 16:42:08 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/12 18:18:00 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,11 @@ unsigned int buf[64][64];
 
 static void load_tex(int n, t_pos *pos)
 {
-
+	if (n == 0)
+	{
+		pos->tex = mlx_xpm_file_to_image(pos->mlx, "./texture/eagle.xpm", &pos->texWidth, &pos->texHeight);
+		pos->ptr = mlx_get_data_addr(pos->tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+	}
     //unsigned int texture[8];
 /*     *pos->texture[0] = mlx_png_file_to_image(pos->mlx, "./texture/eagle.png", &pos->texWidth, &pos->texHeight);
     *pos->texture[1] = mlx_png_file_to_image(pos->mlx, "./texture/redbrick.png", &pos->texWidth, &pos->texHeight);
@@ -56,12 +60,34 @@ static void load_tex(int n, t_pos *pos)
     *pos->texture[7] = mlx_png_file_to_image(pos->mlx, "./texture/colorstone.png", &pos->texWidth, &pos->texHeight); */
 }
 
+void	clear_textures(t_pos *pos)
+{
+	int	i;
+
+	i = 0;
+	while (i < 8)
+	{
+		if (pos->tex)
+			mlx_destroy_image(pos->mlx, pos->tex);
+		pos->tex = NULL;
+		pos->ptr = NULL;
+		i++;
+	}
+}
+
 void	my_mlx_pixel_put(t_pos *data, int x, int y, int color)
 {
     char    *dst;
 
     dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
     *(unsigned int*)dst = color;
+}
+
+int	get_tex_color(t_pos *pos, int x, int y)
+{
+	if (x >= 0 && x < pos->texWidth && y >= 0 && y < pos->texHeight)
+		return (*(int*)(pos->ptr + (4 * pos->texWidth * y) + (4 * x)));
+	return (0x0);
 }
 
 /* void	ft_verLine(int x, t_pos *pos)
@@ -166,6 +192,7 @@ static void ft_calcolate(t_pos *pos)
 		if (pos->side == 1 && pos->rayDirY < 0)
 			texX = pos->texWidth - texX - 1;
 
+		int color;
 		int y = pos->drawStart;
 		double step = 1.0 * pos->texHeight / pos->lineHeight; //step indica di quanto aumentare le coordinate della texture per ogni pixel nelle coordinate verticali dello schermo
 	  	double texPos = (pos->drawStart - resolutionY / 2 + pos->lineHeight / 2) * step; // Coordinata della texture iniziale
@@ -174,10 +201,10 @@ static void ft_calcolate(t_pos *pos)
 			int texY = (int)texPos & (pos->texHeight - 1); //trasformo la texture posizione Y in intero, in caso di overflow faccio texH -1
 			texPos += step;
 			load_tex(texNum, pos); //fare a casa
-			pos->color = pos->texture[texNum][pos->texHeight * texY + texX];
+			color = get_tex_color(pos, x, y);
 			if (pos->side == 1)
-				pos->color = (pos->color >> 1) & 8355711; //rendo il colore piu scuro
-			my_mlx_pixel_put(pos, x, y, pos->color);
+				color = (color >> 1) & 8355711; //rendo il colore piu scuro
+			my_mlx_pixel_put(pos, x, y, (int)color);
 			mlx_put_image_to_window(pos->mlx, pos->ide_win, pos->img, 0, 0);
 			//ft_verLine(x, pos);
 			//buf[y][x] = pos->color;
@@ -204,6 +231,7 @@ static void ft_calcolate(t_pos *pos)
 		ft_verLine(x, pos); */
 		x++;
 	}
+	clear_textures(pos);
 }
 
 int ft_key_hit(int keycode, t_pos *pos)

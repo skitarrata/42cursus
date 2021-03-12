@@ -6,7 +6,7 @@
 /*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 15:45:16 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/12 16:42:10 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/12 18:17:29 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <fcntl.h>
 # include <math.h>
 # include <errno.h>
-# include "minilibx_mms_20200219/mlx.h"
+# include <mlx.h>
 
 # define mapR 24
 # define mapC 24
@@ -32,7 +32,6 @@
 
 typedef struct	s_pos
 {
-	unsigned int			color;
 	void		*img;
 	void 		*mlx;
 	void 		*ide_win;	
@@ -72,6 +71,8 @@ typedef struct	s_pos
 	int			drawEnd; //punto in cui finisco di colorare
 
 	unsigned int texture[8][4160];
+	void		*tex;
+	void		*ptr;
 }				t_pos;
 
 #endif
