@@ -6,7 +6,7 @@
 /*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 18:31:26 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/12 18:18:00 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/14 19:18:51 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,20 @@ int map[mapR][mapC]=
 
 unsigned int buf[64][64];
 
+void	clear_textures(t_pos *pos)
+{
+	if (pos->tex)
+		mlx_destroy_image(pos->mlx, pos->tex);
+	pos->tex = NULL;
+	pos->addr = NULL;
+}
+
 static void load_tex(int n, t_pos *pos)
 {
 	if (n == 0)
 	{
 		pos->tex = mlx_xpm_file_to_image(pos->mlx, "./texture/eagle.xpm", &pos->texWidth, &pos->texHeight);
-		pos->ptr = mlx_get_data_addr(pos->tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+		//pos->ptr = mlx_get_data_addr(pos->tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
 	}
     //unsigned int texture[8];
 /*     *pos->texture[0] = mlx_png_file_to_image(pos->mlx, "./texture/eagle.png", &pos->texWidth, &pos->texHeight);
@@ -60,21 +68,6 @@ static void load_tex(int n, t_pos *pos)
     *pos->texture[7] = mlx_png_file_to_image(pos->mlx, "./texture/colorstone.png", &pos->texWidth, &pos->texHeight); */
 }
 
-void	clear_textures(t_pos *pos)
-{
-	int	i;
-
-	i = 0;
-	while (i < 8)
-	{
-		if (pos->tex)
-			mlx_destroy_image(pos->mlx, pos->tex);
-		pos->tex = NULL;
-		pos->ptr = NULL;
-		i++;
-	}
-}
-
 void	my_mlx_pixel_put(t_pos *data, int x, int y, int color)
 {
     char    *dst;
@@ -83,10 +76,17 @@ void	my_mlx_pixel_put(t_pos *data, int x, int y, int color)
     *(unsigned int*)dst = color;
 }
 
-int	get_tex_color(t_pos *pos, int x, int y)
+int	get_tex_color(t_pos *pos, int x, int y, int n)
 {
-	if (x >= 0 && x < pos->texWidth && y >= 0 && y < pos->texHeight)
-		return (*(int*)(pos->ptr + (4 * pos->texWidth * y) + (4 * x)));
+	int vet[64][64];
+	int color;
+	if (x >= 0 && x < 64 && y >= 0 && y < 64 && n == 0)
+	{
+		color = (int)(pos->addr + vet[x][y]);
+		return (color);
+	}
+		//return (*(int*)(pos->addr + (4 * pos->texWidth * y) + (4 * x)));
+		//return (0xfff);
 	return (0x0);
 }
 
@@ -192,7 +192,7 @@ static void ft_calcolate(t_pos *pos)
 		if (pos->side == 1 && pos->rayDirY < 0)
 			texX = pos->texWidth - texX - 1;
 
-		int color;
+		unsigned int color;
 		int y = pos->drawStart;
 		double step = 1.0 * pos->texHeight / pos->lineHeight; //step indica di quanto aumentare le coordinate della texture per ogni pixel nelle coordinate verticali dello schermo
 	  	double texPos = (pos->drawStart - resolutionY / 2 + pos->lineHeight / 2) * step; // Coordinata della texture iniziale
@@ -200,16 +200,18 @@ static void ft_calcolate(t_pos *pos)
 		{
 			int texY = (int)texPos & (pos->texHeight - 1); //trasformo la texture posizione Y in intero, in caso di overflow faccio texH -1
 			texPos += step;
-			load_tex(texNum, pos); //fare a casa
-			color = get_tex_color(pos, x, y);
+			load_tex(texNum, pos);
+			color = get_tex_color(pos, texX, texY, texNum);
+			//color = 0x00ff0000;
 			if (pos->side == 1)
 				color = (color >> 1) & 8355711; //rendo il colore piu scuro
 			my_mlx_pixel_put(pos, x, y, (int)color);
-			mlx_put_image_to_window(pos->mlx, pos->ide_win, pos->img, 0, 0);
+			//clear_textures(pos);
 			//ft_verLine(x, pos);
 			//buf[y][x] = pos->color;
 			y++;
 		}
+		mlx_put_image_to_window(pos->mlx, pos->ide_win, pos->img, 0, 0);
 		//drawBuffer(buffer[0]);
 		//scelta colore muro
 /* 		if (map[pos->mapX][pos->mapY])
@@ -231,7 +233,7 @@ static void ft_calcolate(t_pos *pos)
 		ft_verLine(x, pos); */
 		x++;
 	}
-	clear_textures(pos);
+	//clear_textures(pos);
 }
 
 int ft_key_hit(int keycode, t_pos *pos)
@@ -271,8 +273,8 @@ static void	move_W(t_pos *pos)
 		pos->posX += pos->dirX * SPEEDMOVE;
     if (map[(int)pos->posX] [(int)(pos->posY + pos->dirY)] == 0)
 		pos->posY += pos->dirY * SPEEDMOVE;
-	//printf("%f\n", pos->posX);
-	//printf("%f\n", pos->posY);
+	printf("%f\n", pos->posX);
+	printf("%f\n", pos->posY);
 }
 
 static void	move_S(t_pos *pos)

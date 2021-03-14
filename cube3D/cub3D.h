@@ -6,7 +6,7 @@
 /*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 15:45:16 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/12 18:17:29 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/14 19:18:49 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,9 @@ typedef struct	s_pos
 	int			drawStart; // punto in cui inizio a colorare
 	int			drawEnd; //punto in cui finisco di colorare
 
-	unsigned int texture[8][4160];
+	//unsigned int texture[8][4160];
 	void		*tex;
-	void		*ptr;
+	//void		*ptr;
 }				t_pos;
 
 #endif
