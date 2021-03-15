@@ -6,7 +6,7 @@
 /*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 18:31:26 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/14 19:18:51 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/15 18:24:12 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,20 +42,55 @@ int map[mapR][mapC]=
 
 unsigned int buf[64][64];
 
-void	clear_textures(t_pos *pos)
+void	clear_textures(t_pos *pos, t_tex *tex)
 {
-	if (pos->tex)
-		mlx_destroy_image(pos->mlx, pos->tex);
-	pos->tex = NULL;
-	pos->addr = NULL;
+	if (tex->tex)
+		mlx_destroy_image(pos->mlx, tex->tex);
+	tex->tex = NULL;
+	tex->addrestex = NULL;
 }
 
-static void load_tex(int n, t_pos *pos)
+static void load_tex(int n, t_tex *tex, t_pos *pos)
 {
 	if (n == 0)
 	{
-		pos->tex = mlx_xpm_file_to_image(pos->mlx, "./texture/eagle.xpm", &pos->texWidth, &pos->texHeight);
-		//pos->ptr = mlx_get_data_addr(pos->tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+		tex->tex = mlx_xpm_file_to_image(pos->mlx, "./texture/eagle.xpm", &tex->texWidth, &tex->texHeight);
+		tex->addrestex = mlx_get_data_addr(tex->tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+	}
+	else if (n == 1)
+	{
+		tex->tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wall_4.xpm", &tex->texWidth, &tex->texHeight);
+		tex->addrestex = mlx_get_data_addr(tex->tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+	}
+	else if (n == 2)
+	{
+		tex->tex = mlx_xpm_file_to_image(pos->mlx, "./texture/purplestone.xpm", &tex->texWidth, &tex->texHeight);
+		tex->addrestex = mlx_get_data_addr(tex->tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+	}
+	else if (n == 3)
+	{
+		tex->tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wall_3.xpm", &tex->texWidth, &tex->texHeight);
+		tex->addrestex = mlx_get_data_addr(tex->tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+	}
+	else if (n == 4)
+	{
+		tex->tex = mlx_xpm_file_to_image(pos->mlx, "./texture/bluestone.xpm", &tex->texWidth, &tex->texHeight);
+		tex->addrestex = mlx_get_data_addr(tex->tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+	}
+	else if (n == 5)
+	{
+		tex->tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wall_2.xpm", &tex->texWidth, &tex->texHeight);
+		tex->addrestex = mlx_get_data_addr(tex->tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+	}
+	else if (n == 6)
+	{
+		tex->tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wood.xpm", &tex->texWidth, &tex->texHeight);
+		tex->addrestex = mlx_get_data_addr(tex->tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+	}
+	else if (n == 7)
+	{
+		tex->tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wall_1.xpm", &tex->texWidth, &tex->texHeight);
+		tex->addrestex = mlx_get_data_addr(tex->tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
 	}
     //unsigned int texture[8];
 /*     *pos->texture[0] = mlx_png_file_to_image(pos->mlx, "./texture/eagle.png", &pos->texWidth, &pos->texHeight);
@@ -75,35 +110,6 @@ void	my_mlx_pixel_put(t_pos *data, int x, int y, int color)
     dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
     *(unsigned int*)dst = color;
 }
-
-int	get_tex_color(t_pos *pos, int x, int y, int n)
-{
-	int vet[64][64];
-	int color;
-	if (x >= 0 && x < 64 && y >= 0 && y < 64 && n == 0)
-	{
-		color = (int)(pos->addr + vet[x][y]);
-		return (color);
-	}
-		//return (*(int*)(pos->addr + (4 * pos->texWidth * y) + (4 * x)));
-		//return (0xfff);
-	return (0x0);
-}
-
-/* void	ft_verLine(int x, t_pos *pos)
-{
-	int y = pos->drawStart;
-	int sky = 0;
-	int floor = pos->drawEnd + 1;
-
-	while (sky < y)
-		my_mlx_pixel_put(pos, x, sky++, 0x00964b00);
-	while (y <= pos->drawEnd)
-		my_mlx_pixel_put(pos, x, y, pos->color);
-	while (floor < resolutionY)
-		my_mlx_pixel_put(pos, x, floor++, 0x00ea899a);
-	mlx_put_image_to_window(pos->mlx, pos->ide_win, pos->img, 0, 0);
-} */
 
 static void ft_calcolate(t_pos *pos)
 {
@@ -178,59 +184,44 @@ static void ft_calcolate(t_pos *pos)
 			pos->drawEnd = resolutionY - 1;
 
 		int texNum = map[pos->mapX][pos->mapY] - 1; //valore delle texture ,per richiamarle
-
+		texNum = 0;
 		double wallX; //valore esatto del muro quando é stato colpito
 		if(pos->side == 0)
 			wallX = pos->posY + pos->perpWallDist * pos->rayDirY;
 		else
 			wallX = pos->posX + pos->perpWallDist * pos->rayDirX; 
-		wallX -= (int)wallX;
+		wallX -= floor(wallX);
 
-		int texX = (int)(wallX * (double)pos->texWidth); //è la coordinata x della texture, e questa è calcolata da wallX
+		t_tex tex[8];
+		//tex[texNum].texWidth = 64;
+		//tex[texNum].texHeight = 64;
+		load_tex(texNum, &tex[texNum], pos);
+		int texX = (int)(wallX * (double)tex[texNum].texWidth); //è la coordinata x della texture, e questa è calcolata da wallX
 		if (pos->side == 0 && pos->rayDirX > 0)
-			texX = pos->texWidth - texX - 1;
+			texX = tex[texNum].texWidth - texX - 1;
 		if (pos->side == 1 && pos->rayDirY < 0)
-			texX = pos->texWidth - texX - 1;
+			texX = tex[texNum].texWidth - texX - 1;
 
-		unsigned int color;
+		//unsigned int color;
 		int y = pos->drawStart;
-		double step = 1.0 * pos->texHeight / pos->lineHeight; //step indica di quanto aumentare le coordinate della texture per ogni pixel nelle coordinate verticali dello schermo
+		double step = 1.0 * tex[texNum].texHeight / pos->lineHeight; //step indica di quanto aumentare le coordinate della texture per ogni pixel nelle coordinate verticali dello schermo
 	  	double texPos = (pos->drawStart - resolutionY / 2 + pos->lineHeight / 2) * step; // Coordinata della texture iniziale
 		while (y < pos->drawEnd)
 		{
-			int texY = (int)texPos & (pos->texHeight - 1); //trasformo la texture posizione Y in intero, in caso di overflow faccio texH -1
+			int texY = (int)texPos & (tex[texNum].texHeight - 1); //trasformo la texture posizione Y in intero, in caso di overflow faccio texH -1
 			texPos += step;
-			load_tex(texNum, pos);
-			color = get_tex_color(pos, texX, texY, texNum);
-			//color = 0x00ff0000;
-			if (pos->side == 1)
+			//color = get_tex_color(tex, texX, texY);
+		
+			pos->addr[(4 * resolutionX * y) + (4 * x)] = tex[texNum].addrestex[(4 * tex[texNum].texWidth * texY) + (4 * texX)];
+			pos->addr[(4 * resolutionX * y) + (4 * x) + 1] = tex[texNum].addrestex[(4 * tex[texNum].texWidth * texY) + (4 * texX) + 1];
+			pos->addr[(4 * resolutionX * y) + (4 * x) + 2] = tex[texNum].addrestex[(4 * tex[texNum].texWidth * texY) + (4 * texX) + 2];
+		
+/* 			if (pos->side == 1)
 				color = (color >> 1) & 8355711; //rendo il colore piu scuro
-			my_mlx_pixel_put(pos, x, y, (int)color);
-			//clear_textures(pos);
-			//ft_verLine(x, pos);
-			//buf[y][x] = pos->color;
+			my_mlx_pixel_put(pos, x, y, (int)color); */
 			y++;
 		}
 		mlx_put_image_to_window(pos->mlx, pos->ide_win, pos->img, 0, 0);
-		//drawBuffer(buffer[0]);
-		//scelta colore muro
-/* 		if (map[pos->mapX][pos->mapY])
-		{
-			int i = map[pos->mapX][pos->mapY];
-			if (i == 1)
-				pos->color = 0x00ff0000; //red
-			else if (i == 2)
-				pos->color = 0x0000ff00; //gree
-			else if (i == 3)
-				pos->color = 0x000000ff; //blue
-			else if (i == 4)
-				pos->color = 0x00ffffff; //white
-			else if (i == 5)
-				pos->color = 0x00ffff00; //yellow
-		}
-		if (pos->side == 1)
-			pos->color = pos->color / 2; //luminositá colore
-		ft_verLine(x, pos); */
 		x++;
 	}
 	//clear_textures(pos);
@@ -239,7 +230,6 @@ static void ft_calcolate(t_pos *pos)
 int ft_key_hit(int keycode, t_pos *pos)
 {
     pos->keyboard[keycode] = 1;
-	//printf("%d\n", keycode);
     return (0);
 }
 
@@ -259,11 +249,9 @@ void	first_pos(t_pos *pos)
 	pos->dirY = 0;
 	pos->pianoX = 0;
 	pos->pianoY = 0.66;
-	pos->texWidth = 64;
-	pos->texHeight = 64;
+
 	while (i < 100)
 		pos->keyboard[i++] = 0;
-	//load_tex(pos);
 	ft_calcolate(pos);
 }
 

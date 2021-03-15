@@ -6,7 +6,7 @@
 /*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 15:45:16 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/14 19:18:49 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/15 17:48:04 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,16 @@
 # define resolutionY 480
 //# define texWidth 64
 //# define texHeight 64
-# define SPEEDMOVE 0.3
-# define ROTATESPEED 0.1
+# define SPEEDMOVE 0.4
+# define ROTATESPEED 0.2
+
+typedef struct s_tex
+{
+	void		*tex;
+	int			texWidth;
+	int 		texHeight;
+	char		*addrestex;
+}				t_tex;
 
 typedef struct	s_pos
 {
@@ -42,8 +50,6 @@ typedef struct	s_pos
 	int			keyboard[256];
 	char		*relative_path;
 
-	int			texWidth;
-	int 		texHeight;
 	double		posX;
 	double		posY;
 	double		dirX;
@@ -69,10 +75,6 @@ typedef struct	s_pos
 	int			lineHeight; // lunghezza da disegnare
 	int			drawStart; // punto in cui inizio a colorare
 	int			drawEnd; //punto in cui finisco di colorare
-
-	//unsigned int texture[8][4160];
-	void		*tex;
-	//void		*ptr;
 }				t_pos;
 
 #endif
