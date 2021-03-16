@@ -6,7 +6,7 @@
 /*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 18:31:26 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/15 18:24:12 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/16 16:07:29 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,57 +50,24 @@ void	clear_textures(t_pos *pos, t_tex *tex)
 	tex->addrestex = NULL;
 }
 
-static void load_tex(int n, t_tex *tex, t_pos *pos)
+static void load_tex(t_pos *pos, t_tex tex[8])
 {
-	if (n == 0)
-	{
-		tex->tex = mlx_xpm_file_to_image(pos->mlx, "./texture/eagle.xpm", &tex->texWidth, &tex->texHeight);
-		tex->addrestex = mlx_get_data_addr(tex->tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
-	}
-	else if (n == 1)
-	{
-		tex->tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wall_4.xpm", &tex->texWidth, &tex->texHeight);
-		tex->addrestex = mlx_get_data_addr(tex->tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
-	}
-	else if (n == 2)
-	{
-		tex->tex = mlx_xpm_file_to_image(pos->mlx, "./texture/purplestone.xpm", &tex->texWidth, &tex->texHeight);
-		tex->addrestex = mlx_get_data_addr(tex->tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
-	}
-	else if (n == 3)
-	{
-		tex->tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wall_3.xpm", &tex->texWidth, &tex->texHeight);
-		tex->addrestex = mlx_get_data_addr(tex->tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
-	}
-	else if (n == 4)
-	{
-		tex->tex = mlx_xpm_file_to_image(pos->mlx, "./texture/bluestone.xpm", &tex->texWidth, &tex->texHeight);
-		tex->addrestex = mlx_get_data_addr(tex->tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
-	}
-	else if (n == 5)
-	{
-		tex->tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wall_2.xpm", &tex->texWidth, &tex->texHeight);
-		tex->addrestex = mlx_get_data_addr(tex->tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
-	}
-	else if (n == 6)
-	{
-		tex->tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wood.xpm", &tex->texWidth, &tex->texHeight);
-		tex->addrestex = mlx_get_data_addr(tex->tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
-	}
-	else if (n == 7)
-	{
-		tex->tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wall_1.xpm", &tex->texWidth, &tex->texHeight);
-		tex->addrestex = mlx_get_data_addr(tex->tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
-	}
-    //unsigned int texture[8];
-/*     *pos->texture[0] = mlx_png_file_to_image(pos->mlx, "./texture/eagle.png", &pos->texWidth, &pos->texHeight);
-    *pos->texture[1] = mlx_png_file_to_image(pos->mlx, "./texture/redbrick.png", &pos->texWidth, &pos->texHeight);
-    *pos->texture[2] = mlx_png_file_to_image(pos->mlx, "./texture/purplestone.png", &pos->texWidth, &pos->texHeight);
-    *pos->texture[3] = mlx_png_file_to_image(pos->mlx, "./texture/greystone.png", &pos->texWidth, &pos->texHeight);
-    *pos->texture[4] = mlx_png_file_to_image(pos->mlx, "./texture/bluestone.png", &pos->texWidth, &pos->texHeight);
-    *pos->texture[5] = mlx_png_file_to_image(pos->mlx, "./texture/mossy.png", &pos->texWidth, &pos->texHeight);
-    *pos->texture[6] = mlx_png_file_to_image(pos->mlx, "./texture/wood.png", &pos->texWidth, &pos->texHeight);
-    *pos->texture[7] = mlx_png_file_to_image(pos->mlx, "./texture/colorstone.png", &pos->texWidth, &pos->texHeight); */
+	tex[0].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/eagle.xpm", &tex[0].texWidth, &tex[0].texHeight);
+	tex[0].addrestex = mlx_get_data_addr(tex[0].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+	tex[1].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wall_4.xpm", &tex[1].texWidth, &tex[1].texHeight);
+	tex[1].addrestex = mlx_get_data_addr(tex[1].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+	tex[2].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/purplestone.xpm", &tex[2].texWidth, &tex[2].texHeight);
+	tex[2].addrestex = mlx_get_data_addr(tex[2].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+	tex[3].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wall_3.xpm", &tex[3].texWidth, &tex[3].texHeight);
+	tex[3].addrestex = mlx_get_data_addr(tex[3].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+	tex[4].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/bluestone.xpm", &tex[4].texWidth, &tex[4].texHeight);
+	tex[4].addrestex = mlx_get_data_addr(tex[4].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+	tex[5].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wall_2.xpm", &tex[5].texWidth, &tex[5].texHeight);
+	tex[5].addrestex = mlx_get_data_addr(tex[5].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+	tex[6].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wood.xpm", &tex[6].texWidth, &tex[6].texHeight);
+	tex[6].addrestex = mlx_get_data_addr(tex[6].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+	tex[7].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wall_1.xpm", &tex[7].texWidth, &tex[7].texHeight);
+	tex[7].addrestex = mlx_get_data_addr(tex[7].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
 }
 
 void	my_mlx_pixel_put(t_pos *data, int x, int y, int color)
@@ -162,7 +129,7 @@ static void ft_calcolate(t_pos *pos)
 				pos->side = 0; //se side e 0 e usciamo dal ciclo, significa che il muro trovato si trova sul lato x
         	}
         	else
-        	{
+        	{ 
           		pos->sideDistY += pos->deltaDistY;
           		pos->mapY += pos->stepY;
           		pos->side = 1; //se side e 1 e usciamo dal ciclo, significa che il muro trovato si trova sul lato y
@@ -193,9 +160,7 @@ static void ft_calcolate(t_pos *pos)
 		wallX -= floor(wallX);
 
 		t_tex tex[8];
-		//tex[texNum].texWidth = 64;
-		//tex[texNum].texHeight = 64;
-		load_tex(texNum, &tex[texNum], pos);
+		load_tex(pos, &tex[8]);
 		int texX = (int)(wallX * (double)tex[texNum].texWidth); //è la coordinata x della texture, e questa è calcolata da wallX
 		if (pos->side == 0 && pos->rayDirX > 0)
 			texX = tex[texNum].texWidth - texX - 1;
