@@ -6,7 +6,7 @@
 /*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 18:31:26 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/18 11:13:20 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/18 18:03:54 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,18 @@ int map[mapR][mapC]=
 
 unsigned int buf[64][64];
 
-/* void	clear_textures(t_pos *pos, t_tex *tex)
+void	clear_textures(t_pos *pos)
 {
-	if (tex->tex)
-		mlx_destroy_image(pos->mlx, tex->tex);
-	tex->tex = NULL;
-	tex->addrestex = NULL;
-} */
+	int i = 0;
+	while (i < 8)
+	{
+		if (pos->strutex[i].tex)
+			mlx_destroy_image(pos->mlx, pos->strutex[i].tex);
+		pos->strutex[i].tex = NULL;
+		pos->strutex[i].addrestex = NULL;
+		i++;
+	}
+}
 
 static void load_tex(t_pos *pos)
 {
@@ -85,13 +90,24 @@ void	my_mlx_pixel_put(t_pos *data, int x, int y, int color)
     *(unsigned int*)dst = color;
 }
 
+void ft_floor(t_pos *pos, int x)
+{
+	int y = 0;
+	pos->addr = mlx_get_data_addr(pos->img, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+	while (y < pos->drawStart)
+		my_mlx_pixel_put(pos, x, y++, 0x009C9C9C);
+	y = pos->drawEnd;
+	while (y < resolutionY)
+		my_mlx_pixel_put(pos, x, y++, 0x00BA926C);
+}
+
 static void ft_calcolate(t_pos *pos)
 {
 	int x = 0;
 	int y = 0;
 	load_tex(pos);
 
-	while (++y < resolutionY / 2 + 1)
+/* 	while (++y < resolutionY / 2 + 1)
 	{
 		//rayDir per il raggio più a sinistra (x = 0) e il raggio più a destra (x = resolutionX)
 		pos->rayDirX0 = pos->dirX - pos->pianoX;
@@ -141,7 +157,7 @@ static void ft_calcolate(t_pos *pos)
 		}
 		//mlx_put_image_to_window(pos->mlx, pos->ide_win, pos->img, 0, 0);
 	}
-	x = 0;
+	x = 0; */
 	while (x < resolutionX)
 	{
 		pos->cameraX = 2 * x / (double)resolutionX - 1; //posizione della telecamera per ottenere sul lato destro 1, 0 al centro, -1 a sinistra
@@ -209,7 +225,8 @@ static void ft_calcolate(t_pos *pos)
 		pos->drawEnd = pos->lineHeight / 2 + resolutionY / 2; 
       	if (pos->drawEnd >= resolutionY)
 			pos->drawEnd = resolutionY - 1;
-
+		
+		ft_floor(pos, x);
 		int texNum = map[pos->mapX][pos->mapY] - 1; //valore delle texture ,per richiamarle
 		double wallX; //valore esatto del muro quando é stato colpito
 		if(pos->side == 0)
@@ -225,7 +242,6 @@ static void ft_calcolate(t_pos *pos)
 		if (pos->side == 1 && pos->rayDirY < 0)
 			texX = pos->strutex[texNum].texWidth - texX - 1;
 
-		//unsigned int color;
 		y = pos->drawStart;
 		double step = 1.0 * pos->strutex[texNum].texHeight / pos->lineHeight; //step indica di quanto aumentare le coordinate della texture per ogni pixel nelle coordinate verticali dello schermo
 	  	double texPos = (pos->drawStart - resolutionY / 2 + pos->lineHeight / 2) * step; // Coordinata della texture iniziale
@@ -233,21 +249,24 @@ static void ft_calcolate(t_pos *pos)
 		{
 			int texY = (int)texPos & (pos->strutex[texNum].texHeight - 1); //trasformo la texture posizione Y in intero, in caso di overflow faccio texH -1
 			texPos += step;
-			//color = get_tex_color(tex, texX, texY);
-		
-			pos->addr[(4 * resolutionX * y) + (4 * x)] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX)];
-			pos->addr[(4 * resolutionX * y) + (4 * x) + 1] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX) + 1];
-			pos->addr[(4 * resolutionX * y) + (4 * x) + 2] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX) + 2];
-		
-/* 			if (pos->side == 1)
-				color = (color >> 1) & 8355711; //rendo il colore piu scuro
-			my_mlx_pixel_put(pos, x, y, (int)color); */
+			if (pos->side == 0)
+			{
+				pos->addr[(4 * resolutionX * y) + (4 * x)] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX)];
+				pos->addr[(4 * resolutionX * y) + (4 * x) + 1] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX) + 1];
+				pos->addr[(4 * resolutionX * y) + (4 * x) + 2] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX) + 2];
+			}
+			else
+			{
+				pos->addr[(4 * resolutionX * y) + (4 * x)] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX)] >> 1 & 8355711;
+				pos->addr[(4 * resolutionX * y) + (4 * x) + 1] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX) + 1] >> 1 & 8355711;
+				pos->addr[(4 * resolutionX * y) + (4 * x) + 2] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX) + 2] >> 1 & 8355711;
+			}
 			y++;
 		}
 		mlx_put_image_to_window(pos->mlx, pos->ide_win, pos->img, 0, 0);
 		x++;
 	}
-	//clear_textures(pos);
+	clear_textures(pos);
 }
 
 int ft_key_hit(int keycode, t_pos *pos)

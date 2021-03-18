@@ -6,7 +6,7 @@
 /*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 15:45:16 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/16 17:26:07 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/18 18:04:53 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ typedef struct	s_pos
 	int			bits_per_pixel;
 	int			line_length;
 	int			keyboard[256];
-	char		*relative_path;
+	//char		*relative_path;
 
 	t_tex		strutex[TEXUR];
 
