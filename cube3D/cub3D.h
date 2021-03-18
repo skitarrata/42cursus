@@ -6,7 +6,7 @@
 /*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 15:45:16 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/15 17:48:04 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/16 17:26:07 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@
 # define mapC 24
 # define resolutionX 620
 # define resolutionY 480
-//# define texWidth 64
-//# define texHeight 64
+# define TEXUR 8
 # define SPEEDMOVE 0.4
 # define ROTATESPEED 0.2
 
@@ -50,6 +49,8 @@ typedef struct	s_pos
 	int			keyboard[256];
 	char		*relative_path;
 
+	t_tex		strutex[TEXUR];
+
 	double		posX;
 	double		posY;
 	double		dirX;
@@ -60,6 +61,10 @@ typedef struct	s_pos
 	double 		cameraX;
     double		rayDirX; //raggio laser
     double		rayDirY;
+	double		rayDirX0;
+	double		rayDirY0;
+	double		rayDirX1;
+	double		rayDirY1;
 	int			mapX; //casella mappa
     int			mapY;
 	double 		sideDistX; //distanza dalla posizione iniziale del raggio (pos) al primo lato o destro o sinistro, dip dalla componente del raggio

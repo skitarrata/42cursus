@@ -6,7 +6,7 @@
 /*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 18:31:26 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/16 16:07:29 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/18 11:13:20 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,32 +42,39 @@ int map[mapR][mapC]=
 
 unsigned int buf[64][64];
 
-void	clear_textures(t_pos *pos, t_tex *tex)
+/* void	clear_textures(t_pos *pos, t_tex *tex)
 {
 	if (tex->tex)
 		mlx_destroy_image(pos->mlx, tex->tex);
 	tex->tex = NULL;
 	tex->addrestex = NULL;
-}
+} */
 
-static void load_tex(t_pos *pos, t_tex tex[8])
+static void load_tex(t_pos *pos)
 {
-	tex[0].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/eagle.xpm", &tex[0].texWidth, &tex[0].texHeight);
-	tex[0].addrestex = mlx_get_data_addr(tex[0].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
-	tex[1].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wall_4.xpm", &tex[1].texWidth, &tex[1].texHeight);
-	tex[1].addrestex = mlx_get_data_addr(tex[1].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
-	tex[2].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/purplestone.xpm", &tex[2].texWidth, &tex[2].texHeight);
-	tex[2].addrestex = mlx_get_data_addr(tex[2].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
-	tex[3].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wall_3.xpm", &tex[3].texWidth, &tex[3].texHeight);
-	tex[3].addrestex = mlx_get_data_addr(tex[3].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
-	tex[4].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/bluestone.xpm", &tex[4].texWidth, &tex[4].texHeight);
-	tex[4].addrestex = mlx_get_data_addr(tex[4].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
-	tex[5].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wall_2.xpm", &tex[5].texWidth, &tex[5].texHeight);
-	tex[5].addrestex = mlx_get_data_addr(tex[5].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
-	tex[6].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wood.xpm", &tex[6].texWidth, &tex[6].texHeight);
-	tex[6].addrestex = mlx_get_data_addr(tex[6].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
-	tex[7].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wall_1.xpm", &tex[7].texWidth, &tex[7].texHeight);
-	tex[7].addrestex = mlx_get_data_addr(tex[7].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+	pos->strutex[0].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/eagle.xpm", &pos->strutex[0].texWidth, &pos->strutex[0].texHeight);
+	pos->strutex[0].addrestex = mlx_get_data_addr(pos->strutex[0].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+
+	pos->strutex[1].tex= mlx_xpm_file_to_image(pos->mlx, "./texture/wall_4.xpm", &pos->strutex[1].texWidth, &pos->strutex[1].texHeight);
+	pos->strutex[1].addrestex = mlx_get_data_addr(pos->strutex[1].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+
+	pos->strutex[2].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/purplestone.xpm", &pos->strutex[2].texWidth, &pos->strutex[2].texHeight);
+	pos->strutex[2].addrestex = mlx_get_data_addr(pos->strutex[2].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+
+	pos->strutex[3].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wall_3.xpm", &pos->strutex[3].texWidth, &pos->strutex[3].texHeight);
+	pos->strutex[3].addrestex = mlx_get_data_addr(pos->strutex[3].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+
+	pos->strutex[4].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/bluestone.xpm", &pos->strutex[4].texWidth, &pos->strutex[4].texHeight);
+	pos->strutex[4].addrestex = mlx_get_data_addr(pos->strutex[4].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+
+	pos->strutex[5].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wall_2.xpm", &pos->strutex[5].texWidth, &pos->strutex[5].texHeight);
+	pos->strutex[5].addrestex = mlx_get_data_addr(pos->strutex[5].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+
+	pos->strutex[6].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wood.xpm", &pos->strutex[6].texWidth, &pos->strutex[6].texHeight);
+	pos->strutex[6].addrestex = mlx_get_data_addr(pos->strutex[6].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+	
+	pos->strutex[7].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wall_1.xpm", &pos->strutex[7].texWidth, &pos->strutex[7].texHeight);
+	pos->strutex[7].addrestex = mlx_get_data_addr(pos->strutex[7].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
 }
 
 void	my_mlx_pixel_put(t_pos *data, int x, int y, int color)
@@ -81,8 +88,61 @@ void	my_mlx_pixel_put(t_pos *data, int x, int y, int color)
 static void ft_calcolate(t_pos *pos)
 {
 	int x = 0;
+	int y = 0;
+	load_tex(pos);
 
-	while (x <= resolutionX)
+	while (++y < resolutionY / 2 + 1)
+	{
+		//rayDir per il raggio più a sinistra (x = 0) e il raggio più a destra (x = resolutionX)
+		pos->rayDirX0 = pos->dirX - pos->pianoX;
+    	pos->rayDirY0 = pos->dirY - pos->pianoY;
+    	pos->rayDirX1 = pos->dirX + pos->pianoX;
+    	pos->rayDirY1 = pos->dirY + pos->pianoY;
+
+		 //Posizione y corrente rispetto al centro dello schermo (l'orizzonte)
+		int p = y - resolutionY / 2;
+
+		//Posizione verticale della telecamera.
+		float posZ = 0.5 * resolutionY;
+
+		//Distanza orizzontale dalla telecamera al pavimento per la riga corrente.
+    	//0,5 è la posizione z esattamente al centro tra il pavimento e il soffitto.
+    	float rowDistance = posZ / p;
+
+		//calcola il vettore di passo del mondo reale che dobbiamo aggiungere per ogni x (parallelo al piano della telecamera)
+		//l'aggiunta passo dopo passo evita moltiplicazioni con un peso nel loop interno
+		float floorStepX = rowDistance * (pos->rayDirX1 - pos->rayDirX0) / resolutionX;
+		float floorStepY = rowDistance * (pos->rayDirY1 - pos->rayDirY0) / resolutionX;
+
+ 		//coordinate del mondo reale della colonna più a sinistra. Questo verrà aggiornato man mano che ci spostiamo a destra.
+		float floorX = pos->posX + rowDistance * pos->rayDirX0;
+		float floorY = pos->posY + rowDistance * pos->rayDirY0;
+
+		while (++x < resolutionX)
+		{
+			//il coord della cella viene semplicemente ottenuto dalle parti intere di floorX e floorY
+        	int cellX = (int)floorX;
+			int cellY = (int)floorY;
+
+			//ottiene la coordinata della texture
+			int tx = (int) (64 * (floorX - cellX)) & (64 - 1);
+			int ty = (int) (64 * (floorY - cellY)) & (64 - 1);
+
+			floorX += floorStepX;
+			floorY += floorStepY;
+
+        	// scegli la texture e disegna il pixel
+        	int floorTexture = 3;
+        	int ceilingTexture = 6;
+
+			pos->addr[(resolutionY * x) + (4 * y)] = pos->strutex[6].addrestex[(4 * pos->strutex[6].texHeight * ty) + (4 * tx)];
+			pos->addr[(resolutionY * x) + (4 * y) + 1] = pos->strutex[6].addrestex[(4 * pos->strutex[6].texHeight * ty) + (4 * tx) + 1];
+			pos->addr[(resolutionY * x) + (4 * y) + 2] = pos->strutex[6].addrestex[(4 * pos->strutex[6].texHeight * ty) + (4 * tx) + 2];
+		}
+		//mlx_put_image_to_window(pos->mlx, pos->ide_win, pos->img, 0, 0);
+	}
+	x = 0;
+	while (x < resolutionX)
 	{
 		pos->cameraX = 2 * x / (double)resolutionX - 1; //posizione della telecamera per ottenere sul lato destro 1, 0 al centro, -1 a sinistra
     	pos->rayDirX = pos->dirX + pos->pianoX * pos->cameraX; //calcola posizione del raggio
@@ -151,7 +211,6 @@ static void ft_calcolate(t_pos *pos)
 			pos->drawEnd = resolutionY - 1;
 
 		int texNum = map[pos->mapX][pos->mapY] - 1; //valore delle texture ,per richiamarle
-		texNum = 0;
 		double wallX; //valore esatto del muro quando é stato colpito
 		if(pos->side == 0)
 			wallX = pos->posY + pos->perpWallDist * pos->rayDirY;
@@ -159,27 +218,26 @@ static void ft_calcolate(t_pos *pos)
 			wallX = pos->posX + pos->perpWallDist * pos->rayDirX; 
 		wallX -= floor(wallX);
 
-		t_tex tex[8];
-		load_tex(pos, &tex[8]);
-		int texX = (int)(wallX * (double)tex[texNum].texWidth); //è la coordinata x della texture, e questa è calcolata da wallX
+
+		int texX = (int)(wallX * (double)pos->strutex[texNum].texWidth); //è la coordinata x della texture, e questa è calcolata da wallX
 		if (pos->side == 0 && pos->rayDirX > 0)
-			texX = tex[texNum].texWidth - texX - 1;
+			texX = pos->strutex[texNum].texWidth - texX - 1;
 		if (pos->side == 1 && pos->rayDirY < 0)
-			texX = tex[texNum].texWidth - texX - 1;
+			texX = pos->strutex[texNum].texWidth - texX - 1;
 
 		//unsigned int color;
-		int y = pos->drawStart;
-		double step = 1.0 * tex[texNum].texHeight / pos->lineHeight; //step indica di quanto aumentare le coordinate della texture per ogni pixel nelle coordinate verticali dello schermo
+		y = pos->drawStart;
+		double step = 1.0 * pos->strutex[texNum].texHeight / pos->lineHeight; //step indica di quanto aumentare le coordinate della texture per ogni pixel nelle coordinate verticali dello schermo
 	  	double texPos = (pos->drawStart - resolutionY / 2 + pos->lineHeight / 2) * step; // Coordinata della texture iniziale
 		while (y < pos->drawEnd)
 		{
-			int texY = (int)texPos & (tex[texNum].texHeight - 1); //trasformo la texture posizione Y in intero, in caso di overflow faccio texH -1
+			int texY = (int)texPos & (pos->strutex[texNum].texHeight - 1); //trasformo la texture posizione Y in intero, in caso di overflow faccio texH -1
 			texPos += step;
 			//color = get_tex_color(tex, texX, texY);
 		
-			pos->addr[(4 * resolutionX * y) + (4 * x)] = tex[texNum].addrestex[(4 * tex[texNum].texWidth * texY) + (4 * texX)];
-			pos->addr[(4 * resolutionX * y) + (4 * x) + 1] = tex[texNum].addrestex[(4 * tex[texNum].texWidth * texY) + (4 * texX) + 1];
-			pos->addr[(4 * resolutionX * y) + (4 * x) + 2] = tex[texNum].addrestex[(4 * tex[texNum].texWidth * texY) + (4 * texX) + 2];
+			pos->addr[(4 * resolutionX * y) + (4 * x)] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX)];
+			pos->addr[(4 * resolutionX * y) + (4 * x) + 1] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX) + 1];
+			pos->addr[(4 * resolutionX * y) + (4 * x) + 2] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX) + 2];
 		
 /* 			if (pos->side == 1)
 				color = (color >> 1) & 8355711; //rendo il colore piu scuro
