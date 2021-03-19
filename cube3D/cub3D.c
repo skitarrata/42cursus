@@ -42,63 +42,12 @@ int map[mapR][mapC]=
 
 unsigned int buf[64][64];
 
-void	clear_textures(t_pos *pos)
-{
-	int i = 0;
-	while (i < 8)
-	{
-		if (pos->strutex[i].tex)
-			mlx_destroy_image(pos->mlx, pos->strutex[i].tex);
-		pos->strutex[i].tex = NULL;
-		pos->strutex[i].addrestex = NULL;
-		i++;
-	}
-}
-
-static void load_tex(t_pos *pos)
-{
-	pos->strutex[0].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/eagle.xpm", &pos->strutex[0].texWidth, &pos->strutex[0].texHeight);
-	pos->strutex[0].addrestex = mlx_get_data_addr(pos->strutex[0].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
-
-	pos->strutex[1].tex= mlx_xpm_file_to_image(pos->mlx, "./texture/wall_4.xpm", &pos->strutex[1].texWidth, &pos->strutex[1].texHeight);
-	pos->strutex[1].addrestex = mlx_get_data_addr(pos->strutex[1].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
-
-	pos->strutex[2].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/purplestone.xpm", &pos->strutex[2].texWidth, &pos->strutex[2].texHeight);
-	pos->strutex[2].addrestex = mlx_get_data_addr(pos->strutex[2].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
-
-	pos->strutex[3].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wall_3.xpm", &pos->strutex[3].texWidth, &pos->strutex[3].texHeight);
-	pos->strutex[3].addrestex = mlx_get_data_addr(pos->strutex[3].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
-
-	pos->strutex[4].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/bluestone.xpm", &pos->strutex[4].texWidth, &pos->strutex[4].texHeight);
-	pos->strutex[4].addrestex = mlx_get_data_addr(pos->strutex[4].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
-
-	pos->strutex[5].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wall_2.xpm", &pos->strutex[5].texWidth, &pos->strutex[5].texHeight);
-	pos->strutex[5].addrestex = mlx_get_data_addr(pos->strutex[5].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
-
-	pos->strutex[6].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wood.xpm", &pos->strutex[6].texWidth, &pos->strutex[6].texHeight);
-	pos->strutex[6].addrestex = mlx_get_data_addr(pos->strutex[6].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
-	
-	pos->strutex[7].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wall_1.xpm", &pos->strutex[7].texWidth, &pos->strutex[7].texHeight);
-	pos->strutex[7].addrestex = mlx_get_data_addr(pos->strutex[7].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
-}
-
 void	my_mlx_pixel_put(t_pos *data, int x, int y, int color)
 {
     char    *dst;
 
     dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
     *(unsigned int*)dst = color;
-}
-
-void ft_floor(t_pos *pos, int x)
-{
-	int y = 0;
-	pos->addr = mlx_get_data_addr(pos->img, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
-	while (y < pos->drawStart)
-		my_mlx_pixel_put(pos, x, y++, 0x009C9C9C);
-	y = pos->drawEnd;
-	while (y < resolutionY)
-		my_mlx_pixel_put(pos, x, y++, 0x00BA926C);
 }
 
 static void ft_calcolate(t_pos *pos)
@@ -194,6 +143,7 @@ static void ft_calcolate(t_pos *pos)
 
 		//DDA incrementa il raggio di 1 quadrato ogni volta che non incontra un muro
 		int	hit;
+		int side; //ci serve per capire su quale lato abbiamo colpito il muro
 
 		hit = 0;
     	while (hit == 0)
@@ -202,34 +152,35 @@ static void ft_calcolate(t_pos *pos)
         	{
           		pos->sideDistX += pos->deltaDistX; //sommo le distanze trovate su X che non hanno muri
 				pos->mapX += pos->stepX; //incrementiamo la casella in base al passo
-				pos->side = 0; //se side e 0 e usciamo dal ciclo, significa che il muro trovato si trova sul lato x
+				side = 0; //se side e 0 e usciamo dal ciclo, significa che il muro trovato si trova sul lato x
         	}
         	else
         	{ 
           		pos->sideDistY += pos->deltaDistY;
           		pos->mapY += pos->stepY;
-          		pos->side = 1; //se side e 1 e usciamo dal ciclo, significa che il muro trovato si trova sul lato y
+          		side = 1; //se side e 1 e usciamo dal ciclo, significa che il muro trovato si trova sul lato y
         	}
         	if(map[pos->mapX][pos->mapY] > 0) //quando incontro un muro esco dal ciclo
 				hit = 1;
 		}
-		if (pos->side == 0)
+		if (side == 0)
 			pos->perpWallDist = (pos->mapX - pos->posX + (1 - pos->stepX) / 2) / pos->rayDirX;
       	else
 			pos->perpWallDist = (pos->mapY - pos->posY + (1 - pos->stepY) / 2) / pos->rayDirY;
 
-		pos->lineHeight = (int) (resolutionY / pos->perpWallDist); // calcola il pixel più basso e più alto per riempire la striscia corrente
-       	pos->drawStart = -pos->lineHeight / 2 + resolutionY / 2; 
+		int lineHeight; // lunghezza da disegnare
+		lineHeight = (int) (resolutionY / pos->perpWallDist); // calcola il pixel più basso e più alto per riempire la striscia corrente
+       	pos->drawStart = -lineHeight / 2 + resolutionY / 2; 
 		if (pos->drawStart < 0)
 			pos->drawStart = 0; 
-		pos->drawEnd = pos->lineHeight / 2 + resolutionY / 2; 
+		pos->drawEnd = lineHeight / 2 + resolutionY / 2; 
       	if (pos->drawEnd >= resolutionY)
 			pos->drawEnd = resolutionY - 1;
 		
-		ft_floor(pos, x);
+		ft_floor_tex(pos, x);
 		int texNum = map[pos->mapX][pos->mapY] - 1; //valore delle texture ,per richiamarle
 		double wallX; //valore esatto del muro quando é stato colpito
-		if(pos->side == 0)
+		if(side == 0)
 			wallX = pos->posY + pos->perpWallDist * pos->rayDirY;
 		else
 			wallX = pos->posX + pos->perpWallDist * pos->rayDirX; 
@@ -237,19 +188,19 @@ static void ft_calcolate(t_pos *pos)
 
 
 		int texX = (int)(wallX * (double)pos->strutex[texNum].texWidth); //è la coordinata x della texture, e questa è calcolata da wallX
-		if (pos->side == 0 && pos->rayDirX > 0)
+		if (side == 0 && pos->rayDirX > 0)
 			texX = pos->strutex[texNum].texWidth - texX - 1;
-		if (pos->side == 1 && pos->rayDirY < 0)
+		if (side == 1 && pos->rayDirY < 0)
 			texX = pos->strutex[texNum].texWidth - texX - 1;
 
 		y = pos->drawStart;
-		double step = 1.0 * pos->strutex[texNum].texHeight / pos->lineHeight; //step indica di quanto aumentare le coordinate della texture per ogni pixel nelle coordinate verticali dello schermo
-	  	double texPos = (pos->drawStart - resolutionY / 2 + pos->lineHeight / 2) * step; // Coordinata della texture iniziale
+		double step = 1.0 * pos->strutex[texNum].texHeight / lineHeight; //step indica di quanto aumentare le coordinate della texture per ogni pixel nelle coordinate verticali dello schermo
+	  	double texPos = (pos->drawStart - resolutionY / 2 + lineHeight / 2) * step; // Coordinata della texture iniziale
 		while (y < pos->drawEnd)
 		{
 			int texY = (int)texPos & (pos->strutex[texNum].texHeight - 1); //trasformo la texture posizione Y in intero, in caso di overflow faccio texH -1
 			texPos += step;
-			if (pos->side == 0)
+			if (side == 0)
 			{
 				pos->addr[(4 * resolutionX * y) + (4 * x)] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX)];
 				pos->addr[(4 * resolutionX * y) + (4 * x) + 1] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX) + 1];
@@ -269,18 +220,6 @@ static void ft_calcolate(t_pos *pos)
 	clear_textures(pos);
 }
 
-int ft_key_hit(int keycode, t_pos *pos)
-{
-    pos->keyboard[keycode] = 1;
-    return (0);
-}
-
-int ft_key_release(int keycode, t_pos *pos)
-{
-    pos->keyboard[keycode] = 0;
-    return (0);
-}
-
 void	first_pos(t_pos *pos)
 {
 	int i = 0;
@@ -297,69 +236,6 @@ void	first_pos(t_pos *pos)
 	ft_calcolate(pos);
 }
 
-static void	move_W(t_pos *pos)
-{
-	if (map[(int)(pos->posX + pos->dirX)] [(int)pos->posY] == 0)
-		pos->posX += pos->dirX * SPEEDMOVE;
-    if (map[(int)pos->posX] [(int)(pos->posY + pos->dirY)] == 0)
-		pos->posY += pos->dirY * SPEEDMOVE;
-	printf("%f\n", pos->posX);
-	printf("%f\n", pos->posY);
-}
-
-static void	move_S(t_pos *pos)
-{
-	if (map[(int)(pos->posX - pos->dirX)] [(int)pos->posY] == 0)
-		pos->posX -= pos->dirX * SPEEDMOVE;
-    if (map[(int)pos->posX] [(int)(pos->posY - pos->dirY)] == 0)
-		pos->posY -= pos->dirY * SPEEDMOVE;
-}
-
-static void	move_A(t_pos *pos)
-{
-	double oldDirX;
-	double oldPlaneX;
-
-	oldDirX = pos->dirX;
-    pos->dirX = pos->dirX * cos(ROTATESPEED / 2) - pos->dirY * sin(ROTATESPEED / 2);
-    pos->dirY = oldDirX * sin(ROTATESPEED / 2) + pos->dirY * cos(ROTATESPEED / 2);
-    oldPlaneX = pos->pianoX;
-    pos->pianoX = pos->pianoX * cos(ROTATESPEED / 2) - pos->pianoY * sin(ROTATESPEED / 2);
-    pos->pianoY = oldPlaneX * sin(ROTATESPEED / 2) + pos->pianoY * cos(ROTATESPEED / 2);
-}
-
-static void	move_D(t_pos *pos)
-{
-	double oldDirX;
-	double oldPlaneX;
-
-	oldDirX = pos->dirX;
-    pos->dirX = pos->dirX * cos(-ROTATESPEED / 2) - pos->dirY * sin(-ROTATESPEED / 2);
-    pos->dirY = oldDirX * sin(-ROTATESPEED / 2) + pos->dirY * cos(-ROTATESPEED / 2);
-    oldPlaneX = pos->pianoX;
-    pos->pianoX = pos->pianoX * cos(-ROTATESPEED / 2) - pos->pianoY * sin(-ROTATESPEED / 2);
-    pos->pianoY = oldPlaneX * sin(-ROTATESPEED / 2) + pos->pianoY * cos(-ROTATESPEED / 2);
-}
-
-int	press_button(t_pos *pos)
-{
-	/* if (button == 53)
-	{
-		mlx_destroy_window(pos->mlx, pos->ide_win);
-		return (0);
-	} */
-	if (pos->keyboard[13])
-		move_W(pos);
-	else if (pos->keyboard[0])
-		move_A(pos);
-	else if (pos->keyboard[1])
-		move_S(pos);
-	else if (pos->keyboard[2])
-		move_D(pos);
-	ft_calcolate(pos);
-	return (0);
-}
-
 int	main (void)
 {
 	t_pos	pos;
@@ -373,11 +249,5 @@ int	main (void)
 	mlx_hook(pos.ide_win, 3, (1L << 1), ft_key_release, &pos);
 	mlx_loop_hook(pos.mlx, press_button, &pos);
 	mlx_loop(pos.mlx);
-
-	//printf("%s\n", "casa");
-	//img.img = mlx_new_image(mlx, 1920, 1080);
-	//img.add = mlx_get_data_addr(img.img, &img.pixel, &img.len, &img.endian);
-	//my_mlx_pixel_put(&img, 5, 5, 0x00FF0000);
-    //mlx_put_image_to_window(mlx, ide_win, img.img, 0, 0);
 	return (0);
 }

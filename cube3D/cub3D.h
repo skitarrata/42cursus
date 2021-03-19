@@ -47,7 +47,6 @@ typedef struct	s_pos
 	int			bits_per_pixel;
 	int			line_length;
 	int			keyboard[256];
-	//char		*relative_path;
 
 	t_tex		strutex[TEXUR];
 
@@ -61,25 +60,39 @@ typedef struct	s_pos
 	double 		cameraX;
     double		rayDirX; //raggio laser
     double		rayDirY;
-	double		rayDirX0;
-	double		rayDirY0;
-	double		rayDirX1;
-	double		rayDirY1;
+	//double		rayDirX0;
+	//double		rayDirY0;
+	//double		rayDirX1;
+	//double		rayDirY1;
 	int			mapX; //casella mappa
     int			mapY;
 	double 		sideDistX; //distanza dalla posizione iniziale del raggio (pos) al primo lato o destro o sinistro, dip dalla componente del raggio
     double 		sideDistY; 
 
 	double 		deltaDistX; // distanza che il raggio deve percorrere per andare da 1 lato x al successivo lato x, viceversa
-    double 		deltaDistY;
-    double 		perpWallDist; //verrà utilizzata per calcolare la lunghezza del raggio
-	int 		stepX; //controllo delle componenti
-    int 		stepY;
+    double 		deltaDistY; //   %
+    double 		perpWallDist; //verrà utilizzata per calcolare la lunghezza del raggio  %
+	int 		stepX; //controllo delle componenti  %
+    int 		stepY;  //  %
 
-    int 		side; //ci serve per capire su quale lato abbiamo colpito il muro
-	int			lineHeight; // lunghezza da disegnare
+    //int 		side; //ci serve per capire su quale lato abbiamo colpito il muro  %
+	//int			lineHeight; // lunghezza da disegnare   %
 	int			drawStart; // punto in cui inizio a colorare
 	int			drawEnd; //punto in cui finisco di colorare
 }				t_pos;
+
+void			clear_textures(t_pos *pos);
+static void		load_tex(t_pos *pos);
+void 			ft_floor_tex(t_pos *pos, int x);
+int				press_button(t_pos *pos);
+static void		move_W(t_pos *pos);
+static void		move_A(t_pos *pos);
+static void		move_D(t_pos *pos);
+static void		move_S(t_pos *pos);
+int 			ft_key_release(int keycode, t_pos *pos);
+int 			ft_key_hit(int keycode, t_pos *pos);
+void			first_pos(t_pos *pos);
+static void		ft_calcolate(t_pos *pos);
+void			my_mlx_pixel_put(t_pos *data, int x, int y, int color);
 
 #endif
