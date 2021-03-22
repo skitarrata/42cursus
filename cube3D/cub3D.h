@@ -25,9 +25,10 @@
 # define mapC 24
 # define resolutionX 620
 # define resolutionY 480
-# define TEXUR 8
+# define TEXUR 11
 # define SPEEDMOVE 0.4
 # define ROTATESPEED 0.2
+# define numSprites 19
 
 typedef struct s_tex
 {
@@ -80,6 +81,8 @@ typedef struct	s_pos
 	int			drawStart; // punto in cui inizio a colorare
 	int			drawEnd; //punto in cui finisco di colorare
 }				t_pos;
+
+
 
 void			clear_textures(t_pos *pos);
 static void		load_tex(t_pos *pos);

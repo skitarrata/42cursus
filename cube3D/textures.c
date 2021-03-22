@@ -39,6 +39,15 @@ static void load_tex(t_pos *pos)
 	
 	pos->strutex[7].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/wall_1.xpm", &pos->strutex[7].texWidth, &pos->strutex[7].texHeight);
 	pos->strutex[7].addrestex = mlx_get_data_addr(pos->strutex[7].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+
+	pos->strutex[8].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/sprite_1.xpm", &pos->strutex[8].texWidth, &pos->strutex[8].texHeight);
+	pos->strutex[8].addrestex = mlx_get_data_addr(pos->strutex[8].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+
+	pos->strutex[9].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/sprite_2.xpm", &pos->strutex[9].texWidth, &pos->strutex[9].texHeight);
+	pos->strutex[9].addrestex = mlx_get_data_addr(pos->strutex[9].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
+	
+	pos->strutex[10].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/sprite_3.xpm", &pos->strutex[10].texWidth, &pos->strutex[10].texHeight);
+	pos->strutex[10].addrestex = mlx_get_data_addr(pos->strutex[10].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
 }
 
 void ft_floor_tex(t_pos *pos, int x)
