@@ -40,7 +40,7 @@ int map[mapR][mapC]=
   {2,2,2,2,1,2,2,2,2,2,2,1,2,2,2,5,5,5,5,5,5,5,5,5}
 };
 
-struct Sprite
+struct sprite
 {
   double x;
   double y;
@@ -296,7 +296,7 @@ static void ft_calcolate(t_pos *pos)
 			y++;
 		}
 		mlx_put_image_to_window(pos->mlx, pos->ide_win, pos->img, 0, 0);
-		ZBuffer[x] = perpWallDist;
+		ZBuffer[x] = pos->perpWallDist;
 		x++;
 	}
 	clear_textures(pos);
@@ -313,23 +313,20 @@ static void ft_calcolate(t_pos *pos)
 	i = 0;
 	while (i < numSprites)
 	{
+		int texNum = map[pos->mapX][pos->mapY] - 1;
 		double spriteX = sprite[spriteOrder[i]].x - pos->posX;
 		double spriteY = sprite[spriteOrder[i]].y - pos->posY;
 
 
-		double invDet = 1.0 / (pos->planeX * pos->dirY - pos->dirX * pos->planeY); //required for correct matrix multiplication
+		double invDet = 1.0 / (pos->pianoX * pos->dirY - pos->dirX * pos->pianoY); //required for correct matrix multiplication
 
 		double transformX = invDet * (pos->dirY * spriteX - pos->dirX * spriteY);
-		double transformY = invDet * (-pos->planeY * spriteX + pos->planeX * spriteY); //this is actually the depth inside the screen, that what Z is in 3D
+		double transformY = invDet * (-pos->pianoY * spriteX + pos->pianoX * spriteY); //this is actually the depth inside the screen, that what Z is in 3D
 
-		int spriteScreenX = int((resolutionX / 2) * (1 + transformX / transformY));
+		int spriteScreenX = (int)((resolutionX / 2) * (1 + transformX / transformY));
 
 		      //calculate height of the sprite on screen
-		int spriteHeight = fabs(int(resolutionY / (transformY)));
-
-
-      	//calculate height of the sprite on screen
-      	int spriteHeight = fabs(int(resolutionY / (transformY))); //using 'transformY' instead of the real distance prevents fisheye
+		int spriteHeight = fabs((int)(resolutionY / (transformY))); //using 'transformY' instead of the real distance prevents fisheye
       	//calculate lowest and highest pixel to fill in current stripe
       	int drawStartY = -spriteHeight / 2 + resolutionY / 2;
       	if(drawStartY < 0)
@@ -339,7 +336,7 @@ static void ft_calcolate(t_pos *pos)
 			drawEndY = resolutionY - 1;
 
       //calculate width of the sprite
-      	int spriteWidth = fabs( int (resolutionY / (transformY)));
+      	int spriteWidth = fabs((int)(resolutionY / (transformY)));
       	int drawStartX = -spriteWidth / 2 + spriteScreenX;
       	if(drawStartX < 0)
 			drawStartX = 0;
@@ -350,14 +347,14 @@ static void ft_calcolate(t_pos *pos)
 		int stripe = drawStartX;
 		while (stripe < drawEndX)
 		{
-			int texX = int(256 * (stripe - (-spriteWidth / 2 + spriteScreenX)) * 64 / spriteWidth) / 256;
+			int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX)) * 64 / spriteWidth) / 256;
 			if(transformY > 0 && stripe > 0 && stripe < resolutionX && transformY < ZBuffer[stripe])
 			{
 				int z = drawStartY;
 				while (z < drawEndY)
 				{
 					int d = (z) * 256 - resolutionY * 128 + spriteHeight * 128; //256 and 128 factors to avoid floats
-					int texY = ((d * texHeight) / spriteHeight) / 256;
+					int texY = ((d * 64) / spriteHeight) / 256;
 					pos->addr[(4 * resolutionX * z) + (4 * stripe)] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX)];
 					pos->addr[(4 * resolutionX * z) + (4 * stripe) + 1] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX) + 1];
 					pos->addr[(4 * resolutionX * z) + (4 * stripe) + 2] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX) + 2];
