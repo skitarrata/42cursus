@@ -6,7 +6,7 @@
 /*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 18:31:26 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/24 19:09:28 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/24 20:47:11 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,7 +245,7 @@ void ft_calcolate(t_pos *pos)
           		pos->mapY += pos->stepY;
           		side = 1; //se side e 1 e usciamo dal ciclo, significa che il muro trovato si trova sul lato y
         	}
-        	if(map[pos->mapX][pos->mapY] > 0) //quando incontro un muro esco dal ciclo
+        	if(map[pos->mapX][pos->mapY] > 0 && !(map[pos->mapX][pos->mapY] >= 9 && map[pos->mapX][pos->mapY] <= 11)) //quando incontro un muro esco dal ciclo
 				hit = 1;
 		}
 		if (side == 0)
@@ -262,10 +262,10 @@ void ft_calcolate(t_pos *pos)
       	if (pos->drawEnd >= resolutionY)
 			pos->drawEnd = resolutionY - 1;
 		
-		int texNum = map[pos->mapX][pos->mapY] - 1; //valore delle texture ,per richiamarle
-/* 		if (texNum >= 8 && texNum <= 10)
-			texNum = 0; */
 		ft_floor_tex(pos, x);
+		int texNum = map[pos->mapX][pos->mapY] - 1; //valore delle texture ,per richiamarle
+		//if (texNum >= 8 && texNum <= 10)
+			//texNum = -1;
 		double wallX; //valore esatto del muro quando é stato colpito
 		if(side == 0)
 			wallX = pos->posY + pos->perpWallDist * pos->rayDirY;
@@ -301,11 +301,10 @@ void ft_calcolate(t_pos *pos)
 			}
 			y++;
 		}
-		mlx_put_image_to_window(pos->mlx, pos->ide_win, pos->img, 0, 0);
 		ZBuffer[x] = pos->perpWallDist;
 		x++;
 	}
-	//clear_textures(pos);
+	//mlx_put_image_to_window(pos->mlx, pos->ide_win, pos->img, 0, 0);
 
 	int i = 0;
 	while (i < numSprites)
@@ -319,9 +318,9 @@ void ft_calcolate(t_pos *pos)
 	i = 0;
 	while (i < numSprites)
 	{
-		int texNum = map[pos->mapX][pos->mapY] - 1;
-/* 		if (!(texNum >= 8 && texNum <= 10))
-			return ; */
+		//int texNum = map[pos->mapX][pos->mapY] - 1;
+		//if (!(texNum >= 8 && texNum <= 10))
+			//return ;
 		double spriteX = sprite[spriteOrder[i]].x - pos->posX;
 		double spriteY = sprite[spriteOrder[i]].y - pos->posY;
 
@@ -355,26 +354,35 @@ void ft_calcolate(t_pos *pos)
 		int stripe = drawStartX;
 		while (stripe < drawEndX)
 		{
-			//exit (0);
 			int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX)) * 64 / spriteWidth) / 256;
 			if(transformY > 0 && stripe > 0 && stripe < resolutionX && transformY < ZBuffer[stripe])
 			{
 				int z = drawStartY;
 				while (z < drawEndY)
 				{
-					//exit (0);
 					int d = (z) * 256 - resolutionY * 128 + spriteHeight * 128; //256 and 128 factors to avoid floats
 					int texY = ((d * 64) / spriteHeight) / 256;
-/* 					pos->addr[(4 * resolutionX * z) + (4 * stripe)] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX)];
-					pos->addr[(4 * resolutionX * z) + (4 * stripe) + 1] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX) + 1];
-					pos->addr[(4 * resolutionX * z) + (4 * stripe) + 2] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX) + 2]; */
+					if (pos->strutex[sprite[spriteOrder[i]].texture].addrestex[(4 * pos->strutex[sprite[spriteOrder[i]].texture].texWidth * texY) + (4 * texX)] != (char)0x00 ||
+						pos->strutex[sprite[spriteOrder[i]].texture].addrestex[(4 * pos->strutex[sprite[spriteOrder[i]].texture].texWidth * texY) + (4 * texX) + 1] != (char)0x00 ||
+						pos->strutex[sprite[spriteOrder[i]].texture].addrestex[(4 * pos->strutex[sprite[spriteOrder[i]].texture].texWidth * texY) + (4 * texX) + 2] != (char)0x00)
+					{
+						pos->addr[(4 * resolutionX * z) + (4 * stripe)] = pos->strutex[sprite[spriteOrder[i]].texture].addrestex[(4 * pos->strutex[sprite[spriteOrder[i]].texture].texWidth * texY) + (4 * texX)];
+						pos->addr[(4 * resolutionX * z) + (4 * stripe) + 1] = pos->strutex[sprite[spriteOrder[i]].texture].addrestex[(4 * pos->strutex[sprite[spriteOrder[i]].texture].texWidth * texY) + (4 * texX) + 1];
+						pos->addr[(4 * resolutionX * z) + (4 * stripe) + 2] = pos->strutex[sprite[spriteOrder[i]].texture].addrestex[(4 * pos->strutex[sprite[spriteOrder[i]].texture].texWidth * texY) + (4 * texX) + 2];
+					}
+/* 					pos->addr[(4 * resolutionX * z) + (4 * stripe)] = pos->strutex[sprite[spriteOrder[i]].texture].addrestex[(4 * pos->strutex[sprite[spriteOrder[i]].texture].texWidth * texY) + (4 * texX)];
+					pos->addr[(4 * resolutionX * z) + (4 * stripe) + 1] = pos->strutex[sprite[spriteOrder[i]].texture].addrestex[(4 * pos->strutex[sprite[spriteOrder[i]].texture].texWidth * texY) + (4 * texX) + 1];
+					pos->addr[(4 * resolutionX * z) + (4 * stripe) + 2] = pos->strutex[sprite[spriteOrder[i]].texture].addrestex[(4 * pos->strutex[sprite[spriteOrder[i]].texture].texWidth * texY) + (4 * texX) + 2]; */
 					z++;
 				}
+				//mlx_put_image_to_window(pos->mlx, pos->ide_win, pos->img, 0, 0);
 			}
 			stripe++;
 		}
+		mlx_put_image_to_window(pos->mlx, pos->ide_win, pos->img, 0, 0);
 		i++;
 	}
+	clear_textures(pos);
 }
 
 void	first_pos(t_pos *pos)

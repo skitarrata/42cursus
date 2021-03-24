@@ -6,7 +6,7 @@
 /*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 15:45:16 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/24 17:15:53 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/24 20:33:58 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@
 # define resolutionX 620
 # define resolutionY 480
 # define TEXUR 11
-# define SPEEDMOVE 0.4
-# define ROTATESPEED 0.2
+# define SPEEDMOVE 0.1
+# define ROTATESPEED 0.1
 # define numSprites 19
 
 typedef struct	s_tex
