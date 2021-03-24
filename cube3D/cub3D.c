@@ -6,7 +6,7 @@
 /*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 18:31:26 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/18 18:03:54 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/24 19:09:28 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,21 +33,14 @@ int map[mapR][mapC]=
   {1,0,0,0,0,0,0,0,1,4,4,4,4,4,6,0,6,3,3,0,0,0,3,3},
   {2,0,0,0,0,0,0,0,2,2,2,1,2,2,2,6,6,0,0,5,0,5,0,5},
   {2,2,0,0,0,0,0,2,2,2,0,0,0,2,2,0,5,0,5,0,0,0,5,5},
-  {2,0,0,0,0,0,0,0,2,0,0,0,0,0,2,5,0,5,0,5,0,5,0,5},
+  {2,0,0,0,0,0,0,0,2,0,0,0,0,0,2,5,9,5,0,5,0,5,0,5},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5},
   {2,0,0,0,0,0,0,0,2,0,0,0,0,0,2,5,0,5,0,5,0,5,0,5},
   {2,2,0,0,0,0,0,2,2,2,0,0,0,2,2,0,5,0,5,0,0,0,5,5},
   {2,2,2,2,1,2,2,2,2,2,2,1,2,2,2,5,5,5,5,5,5,5,5,5}
 };
 
-struct sprite
-{
-  double x;
-  double y;
-  int texture;
-};
-
-Sprite sprite[numSprites] =
+t_sprite sprite[numSprites] =
 {
   {20.5, 11.5, 10}, //green light in front of playerstart
   //green lights in every room
@@ -90,6 +83,15 @@ void scambia(double *a, double *b)
 	*b = temp;
 }
 
+void scambia_2(int *a, int *b)
+{
+	int temp;
+
+	temp = *a;
+	*a = *b;
+	*b = temp;
+}
+
 void sortSprites(int *order, double *dist, int amount)
 {
 	int i = 0;
@@ -100,7 +102,9 @@ void sortSprites(int *order, double *dist, int amount)
 		while (j > i)
 		{
 			if (order[j] < order[j - 1])
-				scambia((double)order[j], (double)order[j - 1]);
+			{
+				scambia_2(&order[j], &order[j - 1]);
+			}
 			j--;
 		}
 		i++;
@@ -113,13 +117,13 @@ void sortSprites(int *order, double *dist, int amount)
 		while (j > i)
 		{
 			if (dist[j] < dist[j - 1])
-				scambia(dist[j], dist[j - 1]);
+				scambia(&dist[j], &dist[j - 1]);
 			j--;
 		}
 		i++;
 	}
-  }
 }
+
 
 unsigned int buf[64][64];
 
@@ -131,7 +135,7 @@ void	my_mlx_pixel_put(t_pos *data, int x, int y, int color)
     *(unsigned int*)dst = color;
 }
 
-static void ft_calcolate(t_pos *pos)
+void ft_calcolate(t_pos *pos)
 {
 	int x = 0;
 	int y = 0;
@@ -258,8 +262,10 @@ static void ft_calcolate(t_pos *pos)
       	if (pos->drawEnd >= resolutionY)
 			pos->drawEnd = resolutionY - 1;
 		
-		ft_floor_tex(pos, x);
 		int texNum = map[pos->mapX][pos->mapY] - 1; //valore delle texture ,per richiamarle
+/* 		if (texNum >= 8 && texNum <= 10)
+			texNum = 0; */
+		ft_floor_tex(pos, x);
 		double wallX; //valore esatto del muro quando é stato colpito
 		if(side == 0)
 			wallX = pos->posY + pos->perpWallDist * pos->rayDirY;
@@ -299,7 +305,7 @@ static void ft_calcolate(t_pos *pos)
 		ZBuffer[x] = pos->perpWallDist;
 		x++;
 	}
-	clear_textures(pos);
+	//clear_textures(pos);
 
 	int i = 0;
 	while (i < numSprites)
@@ -314,6 +320,8 @@ static void ft_calcolate(t_pos *pos)
 	while (i < numSprites)
 	{
 		int texNum = map[pos->mapX][pos->mapY] - 1;
+/* 		if (!(texNum >= 8 && texNum <= 10))
+			return ; */
 		double spriteX = sprite[spriteOrder[i]].x - pos->posX;
 		double spriteY = sprite[spriteOrder[i]].y - pos->posY;
 
@@ -326,7 +334,7 @@ static void ft_calcolate(t_pos *pos)
 		int spriteScreenX = (int)((resolutionX / 2) * (1 + transformX / transformY));
 
 		      //calculate height of the sprite on screen
-		int spriteHeight = fabs((int)(resolutionY / (transformY))); //using 'transformY' instead of the real distance prevents fisheye
+		int spriteHeight = abs((int)(resolutionY / (transformY))); //using 'transformY' instead of the real distance prevents fisheye
       	//calculate lowest and highest pixel to fill in current stripe
       	int drawStartY = -spriteHeight / 2 + resolutionY / 2;
       	if(drawStartY < 0)
@@ -336,7 +344,7 @@ static void ft_calcolate(t_pos *pos)
 			drawEndY = resolutionY - 1;
 
       //calculate width of the sprite
-      	int spriteWidth = fabs((int)(resolutionY / (transformY)));
+      	int spriteWidth = abs((int)(resolutionY / (transformY)));
       	int drawStartX = -spriteWidth / 2 + spriteScreenX;
       	if(drawStartX < 0)
 			drawStartX = 0;
@@ -347,17 +355,19 @@ static void ft_calcolate(t_pos *pos)
 		int stripe = drawStartX;
 		while (stripe < drawEndX)
 		{
+			//exit (0);
 			int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX)) * 64 / spriteWidth) / 256;
 			if(transformY > 0 && stripe > 0 && stripe < resolutionX && transformY < ZBuffer[stripe])
 			{
 				int z = drawStartY;
 				while (z < drawEndY)
 				{
+					//exit (0);
 					int d = (z) * 256 - resolutionY * 128 + spriteHeight * 128; //256 and 128 factors to avoid floats
 					int texY = ((d * 64) / spriteHeight) / 256;
-					pos->addr[(4 * resolutionX * z) + (4 * stripe)] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX)];
+/* 					pos->addr[(4 * resolutionX * z) + (4 * stripe)] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX)];
 					pos->addr[(4 * resolutionX * z) + (4 * stripe) + 1] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX) + 1];
-					pos->addr[(4 * resolutionX * z) + (4 * stripe) + 2] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX) + 2];
+					pos->addr[(4 * resolutionX * z) + (4 * stripe) + 2] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX) + 2]; */
 					z++;
 				}
 			}

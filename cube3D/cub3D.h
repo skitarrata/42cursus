@@ -6,7 +6,7 @@
 /*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 15:45:16 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/18 18:04:53 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/03/24 17:15:53 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <fcntl.h>
 # include <math.h>
 # include <errno.h>
-# include "minilibx-linux/mlx.h"
+# include <mlx.h>
 
 # define mapR 24
 # define mapC 24
@@ -30,7 +30,7 @@
 # define ROTATESPEED 0.2
 # define numSprites 19
 
-typedef struct s_tex
+typedef struct	s_tex
 {
 	void		*tex;
 	int			texWidth;
@@ -83,9 +83,15 @@ typedef struct	s_pos
 }				t_pos;
 
 
+typedef struct	s_sprite
+{
+  double x;
+  double y;
+  int texture;
+}				t_sprite;
 
 void			clear_textures(t_pos *pos);
-static void		load_tex(t_pos *pos);
+void			load_tex(t_pos *pos);
 void 			ft_floor_tex(t_pos *pos, int x);
 int				press_button(t_pos *pos);
 static void		move_W(t_pos *pos);
@@ -95,7 +101,9 @@ static void		move_S(t_pos *pos);
 int 			ft_key_release(int keycode, t_pos *pos);
 int 			ft_key_hit(int keycode, t_pos *pos);
 void			first_pos(t_pos *pos);
-static void		ft_calcolate(t_pos *pos);
+void			ft_calcolate(t_pos *pos);
 void			my_mlx_pixel_put(t_pos *data, int x, int y, int color);
+void			sortSprites(int *order, double *dist, int amount);
+void			scambia(double *a, double *b);
 
 #endif

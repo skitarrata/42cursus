@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   textures.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/24 16:30:39 by svalenti          #+#    #+#             */
+/*   Updated: 2021/03/24 17:11:22 by svalenti         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "cub3D.h"
 
@@ -14,7 +25,7 @@ void	clear_textures(t_pos *pos)
 	}
 }
 
-static void load_tex(t_pos *pos)
+void load_tex(t_pos *pos)
 {
 	pos->strutex[0].tex = mlx_xpm_file_to_image(pos->mlx, "./texture/eagle.xpm", &pos->strutex[0].texWidth, &pos->strutex[0].texHeight);
 	pos->strutex[0].addrestex = mlx_get_data_addr(pos->strutex[0].tex, &pos->bits_per_pixel, &pos->line_length, &pos->endian);
