@@ -52,25 +52,6 @@ int ft_key_release(int keycode, t_pos *pos)
     return (0);
 }
 
-int	press_button(t_pos *pos)
-{
-	/* if (button == 53)
-	{
-		mlx_destroy_window(pos->mlx, pos->ide_win);
-		return (0);
-	} */
-	if (pos->keyboard[13])
-		move_W(pos);
-	else if (pos->keyboard[0])
-		move_A(pos);
-	else if (pos->keyboard[1])
-		move_S(pos);
-	else if (pos->keyboard[2])
-		move_D(pos);
-	ft_calcolate(pos);
-	return (0);
-}
-
 static void	move_W(t_pos *pos)
 {
 	if (map2[(int)(pos->posX + pos->dirX)] [(int)pos->posY] == 0)
@@ -113,4 +94,23 @@ static void	move_D(t_pos *pos)
     oldPlaneX = pos->pianoX;
     pos->pianoX = pos->pianoX * cos(-ROTATESPEED / 2) - pos->pianoY * sin(-ROTATESPEED / 2);
     pos->pianoY = oldPlaneX * sin(-ROTATESPEED / 2) + pos->pianoY * cos(-ROTATESPEED / 2);
+}
+
+int	press_button(t_pos *pos)
+{
+	/* if (button == 53)
+	{
+		mlx_destroy_window(pos->mlx, pos->ide_win);
+		return (0);
+	} */
+	if (pos->keyboard[13])
+		move_W(pos);
+	else if (pos->keyboard[0])
+		move_A(pos);
+	else if (pos->keyboard[1])
+		move_S(pos);
+	else if (pos->keyboard[2])
+		move_D(pos);
+	ft_calcolate(pos);
+	return (0);
 }

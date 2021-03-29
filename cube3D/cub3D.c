@@ -401,7 +401,7 @@ void	first_pos(t_pos *pos)
 	ft_calcolate(pos);
 }
 
-int	main (void)
+int	main (int argc, char *argv[])
 {
 	t_pos	pos;
 

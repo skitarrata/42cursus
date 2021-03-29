@@ -19,11 +19,11 @@
 # include <fcntl.h>
 # include <math.h>
 # include <errno.h>
-# include <mlx.h>
+# include "mlx.h"
 
 # define mapR 24
 # define mapC 24
-# define resolutionX 620
+# define resolutionX 640
 # define resolutionY 480
 # define TEXUR 11
 # define SPEEDMOVE 0.1
