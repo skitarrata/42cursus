@@ -19,7 +19,7 @@
 # include <fcntl.h>
 # include <math.h>
 # include <errno.h>
-# include "mlx.h"
+# include <mlx.h>
 
 # define mapR 24
 # define mapC 24

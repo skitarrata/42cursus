@@ -98,11 +98,14 @@ static void	move_D(t_pos *pos)
 
 int	press_button(t_pos *pos)
 {
-	/* if (button == 53)
+	if (pos->keyboard[53])
 	{
-		mlx_destroy_window(pos->mlx, pos->ide_win);
-		return (0);
-	} */
+/*     if (pos->screen.img)
+		  mlx_destroy_image(pos->mlx, pos->screen.img); */
+	  if (pos->mlx && pos->ide_win)
+		  mlx_destroy_window(pos->mlx, pos->ide_win);
+	  return (0);
+	}
 	if (pos->keyboard[13])
 		move_W(pos);
 	else if (pos->keyboard[0])
