@@ -98,12 +98,21 @@ static void	move_D(t_pos *pos)
 
 int	press_button(t_pos *pos)
 {
+  int i = 0;
+
 	if (pos->keyboard[53])
 	{
-/*     if (pos->screen.img)
-		  mlx_destroy_image(pos->mlx, pos->screen.img); */
 	  if (pos->mlx && pos->ide_win)
-		  mlx_destroy_window(pos->mlx, pos->ide_win);
+      mlx_destroy_window(pos->mlx, pos->ide_win);
+    while (i < TEXUR)
+    {
+        if (pos->strutex[i].tex)
+          mlx_destroy_image(pos->ide_win, pos->strutex[i].tex);
+        pos->strutex[i].tex = NULL;
+		    pos->strutex[i].addrestex = NULL;
+        i++;
+    }
+    exit(0);
 	  return (0);
 	}
 	if (pos->keyboard[13])
