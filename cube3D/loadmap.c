@@ -26,8 +26,8 @@ void	ft_read_map(t_pos *pos, int fd)
 				{
 					int count = 0;
 
-/* 					while (buf[i] == ' ')
-						i++; */
+					while (buf[i] == ' ')
+						i++;
 					while (buf[i] >= 48 && buf[i] <= 57 && count == 0)
 						pos->resolutionX = ((pos->resolutionX * 10) + (buf[i++] - '0')); //resolution da mettere in pos
 					if (pos->resolutionX)
@@ -39,16 +39,16 @@ void	ft_read_map(t_pos *pos, int fd)
 			}
 			else if (buf[i] == 'F')
 			{
-				int r;
-				int g;
-				int b;
+				int r = 0;
+				int g = 0;
+				int b = 0;
 
 				while (i < dim)
 				{
 					int count = 0;
 
-/* 					while (buf[i] == ' ' || buf[i] == ',')
-						i++; */
+					while (buf[i] == ' ' || buf[i] == ',')
+						i++;
 					while (buf[i] >= 48 && buf[i] <= 57 && count == 0)
 						r = ((r * 10) + (buf[i++] - '0'));
 					if (r)
@@ -65,16 +65,16 @@ void	ft_read_map(t_pos *pos, int fd)
 			}
 			else if (buf[i] == 'C')
 			{
-				int r;
-				int g;
-				int b;
+				int r = 0;
+				int g = 0;
+				int b = 0;
 
 				while (i < dim)
 				{
 					int count = 0;
 
-/* 					while (buf[i] == ' ' || buf[i] == ',')
-						i++; */
+					while (buf[i] == ' ' || buf[i] == ',')
+						i++;
 					while (buf[i] >= 48 && buf[i] <= 57 && count == 0)
 						r = ((r * 10) + (buf[i++] - '0'));
 					if (r)
@@ -88,6 +88,41 @@ void	ft_read_map(t_pos *pos, int fd)
 					i++;
 				}
 				pos->cel = ft_conversion_rgb(t, r, g, b); // da includere in pos o lista a parte 
+			}
+			else if (buf[i] == 'N' && buf[i++] == 'O')
+			{
+				while (buf[i] == ' ')
+					i++;
+				if (buf[i] == '.' && buf[i + 1] == '/')
+					pos->nametex = ft_strdup(&buf[i]); //da includere nemetex e verificare sta cosa :( vedere dove mettere il free
+			}
+			else if (buf[i] == 'S' && buf[i++] == 'O')
+			{
+				while (buf[i] == ' ')
+					i++;
+				if (buf[i] == '.' && buf[i + 1] == '/')
+					pos->nametex = ft_strdup(&buf[i]);
+			}
+			else if (buf[i] == 'W' && buf[i++] == 'E')
+			{
+				while (buf[i] == ' ')
+					i++;
+				if (buf[i] == '.' && buf[i + 1] == '/')
+					pos->nametex = ft_strdup(&buf[i]);
+			}
+			else if (buf[i] == 'E' && buf[i++] == 'A')
+			{
+				while (buf[i] == ' ')
+					i++;
+				if (buf[i] == '.' && buf[i + 1] == '/')
+					pos->nametex = ft_strdup(&buf[i]);
+			}
+			else if (buf[i] == 'S')
+			{
+				while (buf[i] == ' ')
+					i++;
+				if (buf[i] == '.' && buf[i + 1] == '/')
+					pos->nameprite = ft_strdup(&buf[i]); //da includere nemesprite vedere dove mettere il free
 			}
 		}
 	}
