@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gabriele <gabriele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 15:45:16 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/24 20:33:58 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/04/03 20:39:02 by gabriele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <math.h>
 # include <errno.h>
 # include <mlx.h>
+#include "libft/libft.h"
 
 # define mapR 24
 # define mapC 24
@@ -40,6 +41,8 @@ typedef struct	s_tex
 
 typedef struct	s_pos
 {
+	int			save;
+
 	void		*img;
 	void 		*mlx;
 	void 		*ide_win;	
@@ -94,10 +97,10 @@ void			clear_textures(t_pos *pos);
 void			load_tex(t_pos *pos);
 void 			ft_floor_tex(t_pos *pos, int x);
 int				press_button(t_pos *pos);
-static void		move_W(t_pos *pos);
-static void		move_A(t_pos *pos);
-static void		move_D(t_pos *pos);
-static void		move_S(t_pos *pos);
+void			move_w(t_pos *pos);
+void			move_a(t_pos *pos);
+void			move_d(t_pos *pos);
+void			move_s(t_pos *pos);
 int 			ft_key_release(int keycode, t_pos *pos);
 int 			ft_key_hit(int keycode, t_pos *pos);
 void			first_pos(t_pos *pos);
@@ -105,5 +108,7 @@ void			ft_calcolate(t_pos *pos);
 void			my_mlx_pixel_put(t_pos *data, int x, int y, int color);
 void			sortSprites(int *order, double *dist, int amount);
 void			scambia(double *a, double *b);
+int				exit_game(t_pos *pos);
+int				screenshot(t_pos *pos);
 
 #endif

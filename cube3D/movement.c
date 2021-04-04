@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   press_button.c                                     :+:      :+:    :+:   */
+/*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gabriele <gabriele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/24 16:31:39 by svalenti          #+#    #+#             */
-/*   Updated: 2021/04/03 20:36:25 by gabriele         ###   ########.fr       */
+/*   Created: 2021/04/03 20:36:09 by gabriele          #+#    #+#             */
+/*   Updated: 2021/04/03 20:36:55 by gabriele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-int map2[mapR][mapC]=
+int map3[mapR][mapC]=
 {
 	{8,8,8,8,8,8,8,8,8,8,8,4,4,6,4,4,6,4,6,4,4,4,6,4},
 	{8,0,0,0,0,0,0,0,0,0,8,4,0,0,0,0,0,0,0,0,0,0,0,4},
@@ -40,49 +40,46 @@ int map2[mapR][mapC]=
 	{2,2,2,2,1,2,2,2,2,2,2,1,2,2,2,5,5,5,5,5,5,5,5,5}
 };
 
-int		exit_game(t_pos *pos)
+void	move_w(t_pos *pos)
 {
-	int i;
-
-	i = 0;
-	if (pos->mlx && pos->ide_win)
-		mlx_destroy_window(pos->mlx, pos->ide_win);
-	while (i < TEXUR)
-	{
-		if (pos->strutex[i].tex)
-			mlx_destroy_image(pos->ide_win, pos->strutex[i].tex);
-		pos->strutex[i].tex = NULL;
-		pos->strutex[i].addrestex = NULL;
-		i++;
-	}
-	exit(0);
-	return (0);
+	if (map3[(int)(pos->posX + pos->dirX)][(int)pos->posY] == 0)
+		pos->posX += pos->dirX * SPEEDMOVE;
+	if (map3[(int)pos->posX][(int)(pos->posY + pos->dirY)] == 0)
+		pos->posY += pos->dirY * SPEEDMOVE;
+	printf("%f\n", pos->posX);
+	printf("%f\n", pos->posY);
 }
 
-int		ft_key_hit(int keycode, t_pos *pos)
+void	move_s(t_pos *pos)
 {
-	pos->keyboard[keycode] = 1;
-	return (0);
+	if (map3[(int)(pos->posX - pos->dirX)][(int)pos->posY] == 0)
+		pos->posX -= pos->dirX * SPEEDMOVE;
+	if (map3[(int)pos->posX][(int)(pos->posY - pos->dirY)] == 0)
+		pos->posY -= pos->dirY * SPEEDMOVE;
 }
 
-int		ft_key_release(int keycode, t_pos *pos)
+void	move_a(t_pos *pos)
 {
-	pos->keyboard[keycode] = 0;
-	return (0);
+	double oldDirX;
+	double oldPlaneX;
+
+	oldDirX = pos->dirX;
+	pos->dirX = pos->dirX * cos(ROTATESPEED / 2) - pos->dirY * sin(ROTATESPEED / 2);
+	pos->dirY = oldDirX * sin(ROTATESPEED / 2) + pos->dirY * cos(ROTATESPEED / 2);
+	oldPlaneX = pos->pianoX;
+	pos->pianoX = pos->pianoX * cos(ROTATESPEED / 2) - pos->pianoY * sin(ROTATESPEED / 2);
+	pos->pianoY = oldPlaneX * sin(ROTATESPEED / 2) + pos->pianoY * cos(ROTATESPEED / 2);
 }
 
-int		press_button(t_pos *pos)
+void	move_d(t_pos *pos)
 {
-	if (pos->keyboard[53])
-		exit_game(pos);
-	if (pos->keyboard[13])
-		move_w(pos);
-	else if (pos->keyboard[0])
-		move_a(pos);
-	else if (pos->keyboard[1])
-		move_s(pos);
-	else if (pos->keyboard[2])
-		move_d(pos);
-	ft_calcolate(pos);
-	return (0);
+	double oldDirX;
+	double oldPlaneX;
+
+	oldDirX = pos->dirX;
+	pos->dirX = pos->dirX * cos(-ROTATESPEED / 2) - pos->dirY * sin(-ROTATESPEED / 2);
+	pos->dirY = oldDirX * sin(-ROTATESPEED / 2) + pos->dirY * cos(-ROTATESPEED / 2);
+	oldPlaneX = pos->pianoX;
+	pos->pianoX = pos->pianoX * cos(-ROTATESPEED / 2) - pos->pianoY * sin(-ROTATESPEED / 2);
+	pos->pianoY = oldPlaneX * sin(-ROTATESPEED / 2) + pos->pianoY * cos(-ROTATESPEED / 2);
 }

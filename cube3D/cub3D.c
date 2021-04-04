@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gabriele <gabriele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 18:31:26 by svalenti          #+#    #+#             */
-/*   Updated: 2021/03/24 20:47:11 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/04/03 20:40:40 by gabriele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,6 @@ void sortSprites(int *order, double *dist, int amount)
 		}
 		i++;
 	}
-
 	i = 0;
 	j = amount - 1;
 	while (i < amount - 1)
@@ -399,12 +398,17 @@ void	first_pos(t_pos *pos)
 	while (i < 100)
 		pos->keyboard[i++] = 0;
 	ft_calcolate(pos);
+ 	if (pos->save)
+		screenshot(pos);
 }
 
 int	main (int argc, char *argv[])
 {
 	t_pos	pos;
+	pos.save = 0;
 
+	if (argc == 2)
+		pos.save = 1;
 	pos.mlx = mlx_init();
 	pos.ide_win = mlx_new_window(pos.mlx, resolutionX, resolutionY, "cub3D");
 	pos.img = mlx_new_image(pos.mlx, resolutionX, resolutionY);
@@ -412,6 +416,7 @@ int	main (int argc, char *argv[])
 	first_pos(&pos);
 	mlx_hook(pos.ide_win, 2, (1L << 0), ft_key_hit, &pos);
 	mlx_hook(pos.ide_win, 3, (1L << 1), ft_key_release, &pos);
+	mlx_hook(pos.ide_win, 17, 0, &exit_game, &pos);
 	mlx_loop_hook(pos.mlx, press_button, &pos);
 	mlx_loop(pos.mlx);
 	return (0);
