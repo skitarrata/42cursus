@@ -33,7 +33,7 @@ int map[mapR][mapC]=
   {1,0,0,0,0,0,0,0,1,4,4,4,4,4,6,0,6,3,3,0,0,0,3,3},
   {2,0,0,0,0,0,0,0,2,2,2,1,2,2,2,6,6,0,0,5,0,5,0,5},
   {2,2,0,0,0,0,0,2,2,2,0,0,0,2,2,0,5,0,5,0,0,0,5,5},
-  {2,0,0,0,0,0,0,0,2,0,0,0,0,0,2,5,9,5,0,5,0,5,0,5},
+  {2,0,0,0,0,0,0,0,2,0,0,0,0,0,2,5,0,5,0,5,0,5,0,5},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5},
   {2,0,0,0,0,0,0,0,2,0,0,0,0,0,2,5,0,5,0,5,0,5,0,5},
   {2,2,0,0,0,0,0,2,2,2,0,0,0,2,2,0,5,0,5,0,0,0,5,5},
@@ -244,7 +244,7 @@ void ft_calcolate(t_pos *pos)
           		pos->mapY += pos->stepY;
           		side = 1; //se side e 1 e usciamo dal ciclo, significa che il muro trovato si trova sul lato y
         	}
-        	if(map[pos->mapX][pos->mapY] > 0 && !(map[pos->mapX][pos->mapY] >= 9 && map[pos->mapX][pos->mapY] <= 11)) //quando incontro un muro esco dal ciclo
+        	if(map[pos->mapX][pos->mapY] > 0) //quando incontro un muro esco dal ciclo
 				hit = 1;
 		}
 		if (side == 0)
