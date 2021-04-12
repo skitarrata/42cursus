@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loadmap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: grusso <grusso@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/08 18:17:04 by svalenti          #+#    #+#             */
-/*   Updated: 2021/04/10 18:59:34 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/04/12 19:03:49 by grusso           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	ft_count_map(t_pos *pos)
 				count = 1;
 			}
 		}
-		if (count = 1)
+		if (count == 1)
 		{
 			tmp = ft_strlen(str);
 			if (tmp > pos->colmap)
@@ -52,6 +52,7 @@ void	ft_count_map(t_pos *pos)
 			pos->rowmap++;
 		}
 	}
+	close (fd);
 }
 
 int		**allocation_mat(t_pos *pos)
@@ -94,10 +95,10 @@ int		**ft_read_map(t_pos *pos, int fd)
 		{
 			if (buf[i] == 'R')
 			{
+				int count = 0;
+
 				while (i < dim)
 				{
-					int count = 0;
-
 					while (buf[i] == ' ')
 						i++;
 					while (buf[i] >= 48 && buf[i] <= 57 && count == 0)
@@ -114,42 +115,40 @@ int		**ft_read_map(t_pos *pos, int fd)
 				int r = 0;
 				int g = 0;
 				int b = 0;
+				int count = 0;
 
 				while (i < dim)
 				{
-					int count = 0;
-
 					while (buf[i] == ' ' || buf[i] == ',')
 						i++;
 					while (buf[i] >= 48 && buf[i] <= 57 && count == 0)
 						r = ((r * 10) + (buf[i++] - '0'));
-					if (r)
+					if (r && !g)
 						count = 1;
 					while (buf[i] >= 48 && buf[i] <= 57 && count == 1)
 						g = ((g * 10) + (buf[i++] - '0'));
 					if (g)
 						count = 2;
-					while (buf[i] >= 48 && buf[i] <= 57 && count == 1)
+					while (buf[i] >= 48 && buf[i] <= 57 && count == 2)
 						b = ((b * 10) + (buf[i++] - '0'));
 					i++;
 				}
-				pos->floor = ft_conversion_rgb(0, r, g, b); // da includere in pos o lista a parte 
+				pos->floor = ft_conversion_rgb(0, r, g, b); // da includere in pos o lista a parte
 			}
 			else if (buf[i] == 'C')
 			{
 				int r = 0;
 				int g = 0;
 				int b = 0;
+				int count = 0;
 
 				while (i < dim)
 				{
-					int count = 0;
-
 					while (buf[i] == ' ' || buf[i] == ',')
 						i++;
 					while (buf[i] >= 48 && buf[i] <= 57 && count == 0)
 						r = ((r * 10) + (buf[i++] - '0'));
-					if (r)
+					if (r && !g)
 						count = 1;
 					while (buf[i] >= 48 && buf[i] <= 57 && count == 1)
 						g = ((g * 10) + (buf[i++] - '0'));
@@ -161,72 +160,77 @@ int		**ft_read_map(t_pos *pos, int fd)
 				}
 				pos->cel = ft_conversion_rgb(0, r, g, b); // da includere in pos o lista a parte 
 			}
-			else if (buf[i] == 'N' && buf[i++] == 'O')
+			else if (buf[i] == 'N' && buf[i + 1] == 'O')
 			{
+				i += 2;
 				while (buf[i] == ' ')
 					i++;
 				if (buf[i] == '.' && buf[i + 1] == '/')
-					pos->nametex = ft_strdup(&buf[i]); //da includere nemetex e verificare sta cosa :( vedere dove mettere il free
+					pos->strutex[0].nametex = ft_strdup(&buf[i]); //da includere nemetex e verificare sta cosa :( vedere dove mettere il free
 			}
-			else if (buf[i] == 'S' && buf[i++] == 'O')
+			else if (buf[i] == 'S' && buf[i + 1] == 'O')
 			{
+				i += 2;
 				while (buf[i] == ' ')
 					i++;
 				if (buf[i] == '.' && buf[i + 1] == '/')
-					pos->nametex = ft_strdup(&buf[i]);
+					pos->strutex[1].nametex = ft_strdup(&buf[i]);
 			}
-			else if (buf[i] == 'W' && buf[i++] == 'E')
+			else if (buf[i] == 'W' && buf[i + 1] == 'E')
 			{
+				i += 2;
 				while (buf[i] == ' ')
 					i++;
 				if (buf[i] == '.' && buf[i + 1] == '/')
-					pos->nametex = ft_strdup(&buf[i]);
+					pos->strutex[2].nametex = ft_strdup(&buf[i]);
 			}
-			else if (buf[i] == 'E' && buf[i++] == 'A')
+			else if (buf[i] == 'E' && buf[i + 1] == 'A')
 			{
+				i += 2;
 				while (buf[i] == ' ')
 					i++;
 				if (buf[i] == '.' && buf[i + 1] == '/')
-					pos->nametex = ft_strdup(&buf[i]);
+					pos->strutex[3].nametex = ft_strdup(&buf[i]);
 			}
-			else if (buf[i] == 'S')
+			else if (buf[i++] == 'S')
 			{
 				while (buf[i] == ' ')
 					i++;
 				if (buf[i] == '.' && buf[i + 1] == '/')
-					pos->namesprite = ft_strdup(&buf[i]); //da includere nemesprite vedere dove mettere il free
+					pos->strutex[4].nametex = ft_strdup(&buf[i]); //da includere nemesprite vedere dove mettere il free
 			}
 		}
 		else if (buf[i] == ' ' || buf[i] == '1')
 		{
+			i = 0;
 			while (i < pos->colmap)
 			{
 				map[j][i] = buf[i];
 				if (map[j][i] == 'N')
 				{
-					pos->posX = j;
-					pos->posY = i;
+					pos->posX = j + 1;
+					pos->posY = i + 1;
 					pos->dirX = -1;
 					pos->dirY = 0;
 				}
 				if (map[j][i] == 'S')
 				{
-					pos->posX = j;
-					pos->posY = i;
+					pos->posX = j + 1;
+					pos->posY = i + 1;
 					pos->dirX = 1;
 					pos->dirY = 0;
 				}
 				if (map[j][i] == 'W')
 				{
-					pos->posX = j;
-					pos->posY = i;
+					pos->posX = j + 1;
+					pos->posY = i + 1;
 					pos->dirX = 0;
 					pos->dirY = -1;
 				}
 				if (map[j][i] == 'E')
 				{
-					pos->posX = j;
-					pos->posY = i;
+					pos->posX = j + 1;
+					pos->posY = i + 1;
 					pos->dirX = 0;
 					pos->dirY = 1;
 				}
@@ -234,7 +238,32 @@ int		**ft_read_map(t_pos *pos, int fd)
 			}
 			j++;
 		}
+		free(buf);
 	}
+/* 	i = 0;
+	while (i < pos->colmap)
+		{map[j][i] = buf[i];
+		i++;} */
+	//printf("%f %f", pos->posX, pos->posY);
+	//ft_strcpy((char *)map[j], buf);
+	i = 0;
+	while (i < pos->rowmap)
+	{
+		j = 0;
+		while (j < pos->colmap)
+			{printf("%c", map[i][j]);
+			j++;}
+		printf("\n");
+		i++;
+	}
+	return (map);
+}
+
+void	ft_set_pos(t_pos *pos)
+{
+	pos->resolutionX = 0;
+	pos->resolutionY = 0;
+	pos->floor = 0;
 }
 
 //questa roba e da includere nel main principale
@@ -242,13 +271,15 @@ int main ()
 {
 	int fd;
 	t_pos pos;
+	t_tex tex;
 
+	ft_set_pos(&pos);
 	ft_count_map(&pos);
 	if (!(fd = open("./map/map.cub", O_RDONLY)))
 	{
 		printf("\nError open\n");
 		return (0);
 	}
-	ft_read_map(&pos, fd); //ovviamente pos al momento non c e
+	pos.map = ft_read_map(&pos, fd); //ovviamente pos al momento non c e
 	close(fd);
 }

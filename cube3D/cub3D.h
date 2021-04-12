@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: grusso <grusso@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 15:45:16 by svalenti          #+#    #+#             */
-/*   Updated: 2021/04/10 18:21:16 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/04/12 17:15:56 by grusso           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@
 # include <math.h>
 # include <errno.h>
 # include <mlx.h>
-#include "libft/libft.h"
+# include "libft/libft.h"
+# include "get_next_line/get_next_line.h"
 
 # define mapR 24
 # define mapC 24
@@ -37,10 +38,12 @@ typedef struct	s_tex
 	int			texWidth;
 	int 		texHeight;
 	char		*addrestex;
+	char		*nametex;
 }				t_tex;
 
 typedef struct	s_pos
 {
+	int 		**map;
 	int			save;
 
 	void		*img;
@@ -63,8 +66,6 @@ typedef struct	s_pos
 	int			resolutionY;
 	int			floor;
 	int			cel;
-	char		*nametex;
-	char		*namesprite;
 	int			colmap;
 	int			rowmap;
 

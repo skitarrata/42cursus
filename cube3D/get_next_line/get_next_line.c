@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
+/*   By: grusso <grusso@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/21 10:39:08 by svalenti          #+#    #+#             */
-/*   Updated: 2021/02/10 13:51:53 by svalenti         ###   ########.fr       */
+/*   Updated: 2021/04/12 18:27:10 by grusso           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,16 +53,16 @@ char	*check_after_nl(char **after_nl, char **line)
 
 int		get_next_line(int fd, char **line)
 {
-	char		buf[BUFFER_SIZE + 1];
+	char		buf[1 + 1];
 	int			byte_read;
 	char		*tmp;
 	char		*a;
 	static char	*after_nl[OPEN_MAX];
 
-	if ((fd < 0 || line == NULL || read(fd, buf, 0) < 0) || BUFFER_SIZE < 1)
+	if ((fd < 0 || line == NULL || read(fd, buf, 0) < 0) || 1 < 1)
 		return (-1);
 	tmp = check_after_nl(&after_nl[fd], line);
-	while (!tmp && (byte_read = read(fd, &buf, BUFFER_SIZE)))
+	while (!tmp && (byte_read = read(fd, &buf, 1)))
 	{
 		buf[byte_read] = 0;
 		if ((tmp = ft_strchr(buf, '\n')))
