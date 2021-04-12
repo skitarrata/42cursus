@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gabriele <gabriele@student.42.fr>          +#+  +:+       +#+        */
+/*   By: svalenti <svalenti@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 15:45:16 by svalenti          #+#    #+#             */
-/*   Updated: 2021/04/03 20:39:02 by gabriele         ###   ########.fr       */
+/*   Updated: 2021/04/10 18:21:16 by svalenti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@
 
 # define mapR 24
 # define mapC 24
-# define resolutionX 640
-# define resolutionY 480
+//# define resolutionX 640
+//# define resolutionY 480
 # define TEXUR 11
 # define SPEEDMOVE 0.1
 # define ROTATESPEED 0.1
@@ -51,7 +51,6 @@ typedef struct	s_pos
 	int			bits_per_pixel;
 	int			line_length;
 	int			keyboard[256];
-
 	t_tex		strutex[TEXUR];
 
 	double		posX;
@@ -60,6 +59,14 @@ typedef struct	s_pos
 	double		dirY;
 	double		pianoX;
 	double		pianoY;
+	int			resolutionX;
+	int			resolutionY;
+	int			floor;
+	int			cel;
+	char		*nametex;
+	char		*namesprite;
+	int			colmap;
+	int			rowmap;
 
 	double 		cameraX;
     double		rayDirX; //raggio laser
@@ -84,7 +91,6 @@ typedef struct	s_pos
 	int			drawStart; // punto in cui inizio a colorare
 	int			drawEnd; //punto in cui finisco di colorare
 }				t_pos;
-
 
 typedef struct	s_sprite
 {
