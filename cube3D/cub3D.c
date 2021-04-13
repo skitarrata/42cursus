@@ -6,13 +6,13 @@
 /*   By: grusso <grusso@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 18:31:26 by svalenti          #+#    #+#             */
-/*   Updated: 2021/04/12 15:55:41 by grusso           ###   ########.fr       */
+/*   Updated: 2021/04/13 18:43:59 by grusso           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-int map[mapR][mapC]=
+/* int map[mapR][mapC]=
 {
 	{8,8,8,8,8,8,8,8,8,8,8,4,4,6,4,4,6,4,6,4,4,4,6,4},
 	{8,0,0,0,0,0,0,0,0,0,8,4,0,0,0,0,0,0,0,0,0,0,0,4},
@@ -38,7 +38,7 @@ int map[mapR][mapC]=
 	{2,0,0,0,0,0,0,0,2,0,0,0,0,0,2,5,0,5,0,5,0,5,0,5},
 	{2,2,0,0,0,0,0,2,2,2,0,0,0,2,2,0,5,0,5,0,0,0,5,5},
 	{2,2,2,2,1,2,2,2,2,2,2,1,2,2,2,5,5,5,5,5,5,5,5,5}
-};
+}; */
 
 t_sprite sprite[numSprites] =
 {
@@ -67,8 +67,6 @@ t_sprite sprite[numSprites] =
   {10.0, 15.1,8},
   {10.5, 15.8,8},
 };
-
-double ZBuffer[resolutionX];
 
 //arrays used to sort the sprites
 int spriteOrder[numSprites];
@@ -139,10 +137,11 @@ void ft_calcolate(t_pos *pos)
 	int x = 0;
 	int y = 0;
 	load_tex(pos);
+	double ZBuffer[pos->resolutionX];
 
 /* 	while (++y < resolutionY / 2 + 1)
 	{
-		//rayDir per il raggio più a sinistra (x = 0) e il raggio più a destra (x = resolutionX)
+		//rayDir per il raggio più a sinistra (x = 0) e il raggio più a destra (x = pos->resolutionX)
 		pos->rayDirX0 = pos->dirX - pos->pianoX;
     	pos->rayDirY0 = pos->dirY - pos->pianoY;
     	pos->rayDirX1 = pos->dirX + pos->pianoX;
@@ -160,14 +159,14 @@ void ft_calcolate(t_pos *pos)
 
 		//calcola il vettore di passo del mondo reale che dobbiamo aggiungere per ogni x (parallelo al piano della telecamera)
 		//l'aggiunta passo dopo passo evita moltiplicazioni con un peso nel loop interno
-		float floorStepX = rowDistance * (pos->rayDirX1 - pos->rayDirX0) / resolutionX;
-		float floorStepY = rowDistance * (pos->rayDirY1 - pos->rayDirY0) / resolutionX;
+		float floorStepX = rowDistance * (pos->rayDirX1 - pos->rayDirX0) / pos->resolutionX;
+		float floorStepY = rowDistance * (pos->rayDirY1 - pos->rayDirY0) / pos->resolutionX;
 
  		//coordinate del mondo reale della colonna più a sinistra. Questo verrà aggiornato man mano che ci spostiamo a destra.
 		float floorX = pos->posX + rowDistance * pos->rayDirX0;
 		float floorY = pos->posY + rowDistance * pos->rayDirY0;
 
-		while (++x < resolutionX)
+		while (++x < pos->resolutionX)
 		{
 			//il coord della cella viene semplicemente ottenuto dalle parti intere di floorX e floorY
         	int cellX = (int)floorX;
@@ -191,9 +190,9 @@ void ft_calcolate(t_pos *pos)
 		//mlx_put_image_to_window(pos->mlx, pos->ide_win, pos->img, 0, 0);
 	}
 	x = 0; */
-	while (x < resolutionX)
+	while (x < pos->resolutionX)
 	{
-		pos->cameraX = 2 * x / (double)resolutionX - 1; //posizione della telecamera per ottenere sul lato destro 1, 0 al centro, -1 a sinistra
+		pos->cameraX = 2 * x / (double)pos->resolutionX - 1; //posizione della telecamera per ottenere sul lato destro 1, 0 al centro, -1 a sinistra
     	pos->rayDirX = pos->dirX + pos->pianoX * pos->cameraX; //calcola posizione del raggio
     	pos->rayDirY = pos->dirY + pos->pianoY * pos->cameraX;
 
@@ -244,7 +243,7 @@ void ft_calcolate(t_pos *pos)
           		pos->mapY += pos->stepY;
           		side = 1; //se side e 1 e usciamo dal ciclo, significa che il muro trovato si trova sul lato y
         	}
-        	if(map[pos->mapX][pos->mapY] > 0) //quando incontro un muro esco dal ciclo
+        	if(pos->map[pos->mapX][pos->mapY] > 0) //quando incontro un muro esco dal ciclo
 				hit = 1;
 		}
 		if (side == 0)
@@ -253,16 +252,16 @@ void ft_calcolate(t_pos *pos)
 			pos->perpWallDist = (pos->mapY - pos->posY + (1 - pos->stepY) / 2) / pos->rayDirY;
 
 		int lineHeight; // lunghezza da disegnare
-		lineHeight = (int) (resolutionY / pos->perpWallDist); // calcola il pixel più basso e più alto per riempire la striscia corrente
-       	pos->drawStart = -lineHeight / 2 + resolutionY / 2; 
+		lineHeight = (int) (pos->resolutionY / pos->perpWallDist); // calcola il pixel più basso e più alto per riempire la striscia corrente
+       	pos->drawStart = -lineHeight / 2 + pos->resolutionY / 2; 
 		if (pos->drawStart < 0)
 			pos->drawStart = 0; 
-		pos->drawEnd = lineHeight / 2 + resolutionY / 2; 
-      	if (pos->drawEnd >= resolutionY)
-			pos->drawEnd = resolutionY - 1;
+		pos->drawEnd = lineHeight / 2 + pos->resolutionY / 2; 
+      	if (pos->drawEnd >= pos->resolutionY)
+			pos->drawEnd = pos->resolutionY - 1;
 		
 		ft_floor_tex(pos, x);
-		int texNum = map[pos->mapX][pos->mapY] - 1; //valore delle texture ,per richiamarle
+		int texNum = pos->map[pos->mapX][pos->mapY] - 1 - '0'; //valore delle texture ,per richiamarle
 		//if (texNum >= 8 && texNum <= 10)
 			//texNum = -1;
 		double wallX; //valore esatto del muro quando é stato colpito
@@ -281,22 +280,22 @@ void ft_calcolate(t_pos *pos)
 
 		y = pos->drawStart;
 		double step = 1.0 * pos->strutex[texNum].texHeight / lineHeight; //step indica di quanto aumentare le coordinate della texture per ogni pixel nelle coordinate verticali dello schermo
-	  	double texPos = (pos->drawStart - resolutionY / 2 + lineHeight / 2) * step; // Coordinata della texture iniziale
+	  	double texPos = (pos->drawStart - pos->resolutionY / 2 + lineHeight / 2) * step; // Coordinata della texture iniziale
 		while (y < pos->drawEnd)
 		{
 			int texY = (int)texPos & (pos->strutex[texNum].texHeight - 1); //trasformo la texture posizione Y in intero, in caso di overflow faccio texH -1
 			texPos += step;
 			if (side == 0)
 			{
-				pos->addr[(4 * resolutionX * y) + (4 * x)] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX)];
-				pos->addr[(4 * resolutionX * y) + (4 * x) + 1] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX) + 1];
-				pos->addr[(4 * resolutionX * y) + (4 * x) + 2] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX) + 2];
+				pos->addr[(4 * pos->resolutionX * y) + (4 * x)] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX)];
+				pos->addr[(4 * pos->resolutionX * y) + (4 * x) + 1] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX) + 1];
+				pos->addr[(4 * pos->resolutionX * y) + (4 * x) + 2] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX) + 2];
 			}
 			else
 			{
-				pos->addr[(4 * resolutionX * y) + (4 * x)] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX)] >> 1 & 8355711;
-				pos->addr[(4 * resolutionX * y) + (4 * x) + 1] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX) + 1] >> 1 & 8355711;
-				pos->addr[(4 * resolutionX * y) + (4 * x) + 2] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX) + 2] >> 1 & 8355711;
+				pos->addr[(4 * pos->resolutionX * y) + (4 * x)] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX)] >> 1 & 8355711;
+				pos->addr[(4 * pos->resolutionX * y) + (4 * x) + 1] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX) + 1] >> 1 & 8355711;
+				pos->addr[(4 * pos->resolutionX * y) + (4 * x) + 2] = pos->strutex[texNum].addrestex[(4 * pos->strutex[texNum].texWidth * texY) + (4 * texX) + 2] >> 1 & 8355711;
 			}
 			y++;
 		}
@@ -329,49 +328,49 @@ void ft_calcolate(t_pos *pos)
 		double transformX = invDet * (pos->dirY * spriteX - pos->dirX * spriteY);
 		double transformY = invDet * (-pos->pianoY * spriteX + pos->pianoX * spriteY); //this is actually the depth inside the screen, that what Z is in 3D
 
-		int spriteScreenX = (int)((resolutionX / 2) * (1 + transformX / transformY));
+		int spriteScreenX = (int)((pos->resolutionX / 2) * (1 + transformX / transformY));
 
 		      //calculate height of the sprite on screen
-		int spriteHeight = abs((int)(resolutionY / (transformY))); //using 'transformY' instead of the real distance prevents fisheye
+		int spriteHeight = abs((int)(pos->resolutionY / (transformY))); //using 'transformY' instead of the real distance prevents fisheye
       	//calculate lowest and highest pixel to fill in current stripe
-      	int drawStartY = -spriteHeight / 2 + resolutionY / 2;
+      	int drawStartY = -spriteHeight / 2 + pos->resolutionY / 2;
       	if(drawStartY < 0)
 			drawStartY = 0;
-      	int drawEndY = spriteHeight / 2 + resolutionY / 2;
-     	if(drawEndY >= resolutionY)
-			drawEndY = resolutionY - 1;
+      	int drawEndY = spriteHeight / 2 + pos->resolutionY / 2;
+     	if(drawEndY >= pos->resolutionY)
+			drawEndY = pos->resolutionY - 1;
 
       //calculate width of the sprite
-      	int spriteWidth = abs((int)(resolutionY / (transformY)));
+      	int spriteWidth = abs((int)(pos->resolutionY / (transformY)));
       	int drawStartX = -spriteWidth / 2 + spriteScreenX;
       	if(drawStartX < 0)
 			drawStartX = 0;
       	int drawEndX = spriteWidth / 2 + spriteScreenX;
-      	if(drawEndX >= resolutionX) 
-			drawEndX = resolutionX - 1;
+      	if(drawEndX >= pos->resolutionX) 
+			drawEndX = pos->resolutionX - 1;
 		
 		int stripe = drawStartX;
 		while (stripe < drawEndX)
 		{
 			int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX)) * 64 / spriteWidth) / 256;
-			if(transformY > 0 && stripe > 0 && stripe < resolutionX && transformY < ZBuffer[stripe])
+			if(transformY > 0 && stripe > 0 && stripe < pos->resolutionX && transformY < ZBuffer[stripe])
 			{
 				int z = drawStartY;
 				while (z < drawEndY)
 				{
-					int d = (z) * 256 - resolutionY * 128 + spriteHeight * 128; //256 and 128 factors to avoid floats
+					int d = (z) * 256 - pos->resolutionY * 128 + spriteHeight * 128; //256 and 128 factors to avoid floats
 					int texY = ((d * 64) / spriteHeight) / 256;
 					if (pos->strutex[sprite[spriteOrder[i]].texture].addrestex[(4 * pos->strutex[sprite[spriteOrder[i]].texture].texWidth * texY) + (4 * texX)] != (char)0x00 ||
 						pos->strutex[sprite[spriteOrder[i]].texture].addrestex[(4 * pos->strutex[sprite[spriteOrder[i]].texture].texWidth * texY) + (4 * texX) + 1] != (char)0x00 ||
 						pos->strutex[sprite[spriteOrder[i]].texture].addrestex[(4 * pos->strutex[sprite[spriteOrder[i]].texture].texWidth * texY) + (4 * texX) + 2] != (char)0x00)
 					{
-						pos->addr[(4 * resolutionX * z) + (4 * stripe)] = pos->strutex[sprite[spriteOrder[i]].texture].addrestex[(4 * pos->strutex[sprite[spriteOrder[i]].texture].texWidth * texY) + (4 * texX)];
-						pos->addr[(4 * resolutionX * z) + (4 * stripe) + 1] = pos->strutex[sprite[spriteOrder[i]].texture].addrestex[(4 * pos->strutex[sprite[spriteOrder[i]].texture].texWidth * texY) + (4 * texX) + 1];
-						pos->addr[(4 * resolutionX * z) + (4 * stripe) + 2] = pos->strutex[sprite[spriteOrder[i]].texture].addrestex[(4 * pos->strutex[sprite[spriteOrder[i]].texture].texWidth * texY) + (4 * texX) + 2];
+						pos->addr[(4 * pos->resolutionX * z) + (4 * stripe)] = pos->strutex[sprite[spriteOrder[i]].texture].addrestex[(4 * pos->strutex[sprite[spriteOrder[i]].texture].texWidth * texY) + (4 * texX)];
+						pos->addr[(4 * pos->resolutionX * z) + (4 * stripe) + 1] = pos->strutex[sprite[spriteOrder[i]].texture].addrestex[(4 * pos->strutex[sprite[spriteOrder[i]].texture].texWidth * texY) + (4 * texX) + 1];
+						pos->addr[(4 * pos->resolutionX * z) + (4 * stripe) + 2] = pos->strutex[sprite[spriteOrder[i]].texture].addrestex[(4 * pos->strutex[sprite[spriteOrder[i]].texture].texWidth * texY) + (4 * texX) + 2];
 					}
-/* 					pos->addr[(4 * resolutionX * z) + (4 * stripe)] = pos->strutex[sprite[spriteOrder[i]].texture].addrestex[(4 * pos->strutex[sprite[spriteOrder[i]].texture].texWidth * texY) + (4 * texX)];
-					pos->addr[(4 * resolutionX * z) + (4 * stripe) + 1] = pos->strutex[sprite[spriteOrder[i]].texture].addrestex[(4 * pos->strutex[sprite[spriteOrder[i]].texture].texWidth * texY) + (4 * texX) + 1];
-					pos->addr[(4 * resolutionX * z) + (4 * stripe) + 2] = pos->strutex[sprite[spriteOrder[i]].texture].addrestex[(4 * pos->strutex[sprite[spriteOrder[i]].texture].texWidth * texY) + (4 * texX) + 2]; */
+/* 					pos->addr[(4 * pos->resolutionX * z) + (4 * stripe)] = pos->strutex[sprite[spriteOrder[i]].texture].addrestex[(4 * pos->strutex[sprite[spriteOrder[i]].texture].texWidth * texY) + (4 * texX)];
+					pos->addr[(4 * pos->resolutionX * z) + (4 * stripe) + 1] = pos->strutex[sprite[spriteOrder[i]].texture].addrestex[(4 * pos->strutex[sprite[spriteOrder[i]].texture].texWidth * texY) + (4 * texX) + 1];
+					pos->addr[(4 * pos->resolutionX * z) + (4 * stripe) + 2] = pos->strutex[sprite[spriteOrder[i]].texture].addrestex[(4 * pos->strutex[sprite[spriteOrder[i]].texture].texWidth * texY) + (4 * texX) + 2]; */
 					z++;
 				}
 				//mlx_put_image_to_window(pos->mlx, pos->ide_win, pos->img, 0, 0);
@@ -388,13 +387,6 @@ void	first_pos(t_pos *pos)
 {
 	int i = 0;
 
-	pos->posX = 22;
-	pos->posY = 12;
-	pos->dirX = -1;
-	pos->dirY = 0;
-	pos->pianoX = 0;
-	pos->pianoY = 0.66;
-
 	while (i < 100)
 		pos->keyboard[i++] = 0;
 	ft_calcolate(pos);
@@ -405,13 +397,23 @@ void	first_pos(t_pos *pos)
 int	main (int argc, char *argv[])
 {
 	t_pos	pos;
+	int		fd;
 	pos.save = 0;
 
 	if (argc == 2)
 		pos.save = 1;
+	ft_set_pos(&pos);
+	ft_count_map(&pos);
+	if (!(fd = open("./map/map.cub", O_RDONLY)))
+	{
+		printf("\nError open\n");
+		return (0);
+	}
+	pos.map = ft_read_map(&pos, fd);
+	close(fd);
 	pos.mlx = mlx_init();
-	pos.ide_win = mlx_new_window(pos.mlx, resolutionX, resolutionY, "cub3D");
-	pos.img = mlx_new_image(pos.mlx, resolutionX, resolutionY);
+	pos.ide_win = mlx_new_window(pos.mlx, pos.resolutionX, pos.resolutionY, "cub3D");
+	pos.img = mlx_new_image(pos.mlx, pos.resolutionX, pos.resolutionY);
     pos.addr = mlx_get_data_addr(pos.img, &pos.bits_per_pixel, &pos.line_length, &pos.endian);
 	first_pos(&pos);
 	mlx_hook(pos.ide_win, 2, (1L << 0), ft_key_hit, &pos);

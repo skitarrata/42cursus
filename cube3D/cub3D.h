@@ -6,7 +6,7 @@
 /*   By: grusso <grusso@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 15:45:16 by svalenti          #+#    #+#             */
-/*   Updated: 2021/04/12 17:15:56 by grusso           ###   ########.fr       */
+/*   Updated: 2021/04/13 18:44:00 by grusso           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,5 +117,10 @@ void			sortSprites(int *order, double *dist, int amount);
 void			scambia(double *a, double *b);
 int				exit_game(t_pos *pos);
 int				screenshot(t_pos *pos);
+int				ft_conversion_rgb(int t, int r, int g, int b);
+void			ft_count_map(t_pos *pos);
+int				**allocation_mat(t_pos *pos);
+int				**ft_read_map(t_pos *pos, int fd);
+void			ft_set_pos(t_pos *pos);
 
 #endif

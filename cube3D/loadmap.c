@@ -6,7 +6,7 @@
 /*   By: grusso <grusso@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/08 18:17:04 by svalenti          #+#    #+#             */
-/*   Updated: 2021/04/12 19:03:49 by grusso           ###   ########.fr       */
+/*   Updated: 2021/04/13 17:56:11 by grusso           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	ft_count_map(t_pos *pos)
 
 	count = 0;
 	i = 0;
-	pos->rowmap = 0;
+	pos->rowmap = 1;
 	if (!(fd = open("./map/map.cub", O_RDONLY)))
 	{
 		printf("\nError open\n");
@@ -240,22 +240,13 @@ int		**ft_read_map(t_pos *pos, int fd)
 		}
 		free(buf);
 	}
-/* 	i = 0;
-	while (i < pos->colmap)
-		{map[j][i] = buf[i];
-		i++;} */
-	//printf("%f %f", pos->posX, pos->posY);
-	//ft_strcpy((char *)map[j], buf);
 	i = 0;
-	while (i < pos->rowmap)
+	while (i < pos->colmap)
 	{
-		j = 0;
-		while (j < pos->colmap)
-			{printf("%c", map[i][j]);
-			j++;}
-		printf("\n");
+		map[pos->rowmap - 1][i] = buf[i];
 		i++;
 	}
+	free(buf);
 	return (map);
 }
 
@@ -264,14 +255,16 @@ void	ft_set_pos(t_pos *pos)
 	pos->resolutionX = 0;
 	pos->resolutionY = 0;
 	pos->floor = 0;
+	pos->cel = 0;
+	pos->pianoX = 0;
+	pos->pianoY = 0.66;
 }
 
-//questa roba e da includere nel main principale
+/* //questa roba e da includere nel main principale
 int main ()
 {
 	int fd;
 	t_pos pos;
-	t_tex tex;
 
 	ft_set_pos(&pos);
 	ft_count_map(&pos);
@@ -282,4 +275,4 @@ int main ()
 	}
 	pos.map = ft_read_map(&pos, fd); //ovviamente pos al momento non c e
 	close(fd);
-}
+} */
