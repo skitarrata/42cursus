@@ -1,0 +1,40 @@
+function				library					istructions
+
+fork					sys/types.h				https://www.geeksforgeeks.org/fork-system-call/
+wait					sys/wait.h				https://www.geeksforgeeks.org/wait-system-call-c/
+waitpid					sys/wait.h				https://www.tutorialspoint.com/unix_system_calls/waitpid.htm#:~:text=The%20waitpid()%20system%20call,pid%20argument%20has%20changed%20state.&text=0-,meaning%20wait%20for%20any%20child%20process%20whose%20process%20group%20ID,to%20the%20value%20of%20pid.
+wait3					sys/wait.h				https://www.mkssoftware.com/docs/man3/wait3.3.asp#:~:text=The%20wait3()%20function%20delays,of%20one%20of%20those%20children.
+wait4					sys/wait.h				https://www.mkssoftware.com/docs/man3/wait3.3.asp#:~:text=The%20wait3()%20function%20delays,of%20one%20of%20those%20children.
+signal					signal.h				https://www.tutorialspoint.com/c_standard_library/c_function_signal.htm
+kill					signal.h				https://pubs.opengroup.org/onlinepubs/009695399/functions/kill.html
+getcwd					unistd.h				https://pubs.opengroup.org/onlinepubs/007904875/functions/getcwd.html#:~:text=The%20getcwd()%20function%20shall,to%20by%20the%20buf%20argument.
+chdir					unistd.h				https://www.geeksforgeeks.org/chdir-in-c-language-with-examples/
+stat					sys/stat.h				https://codeforwin.org/2018/03/c-program-find-file-properties-using-stat-function.html#:~:text=stat()%20function%20in%20C,and%20dumps%20to%20buf%20structure.&text=On%20success%20the%20function%20returns,buf%20structure%20with%20file%20properties.
+lstat					sys/stat.h				https://pubs.opengroup.org/onlinepubs/009695399/functions/lstat.html
+fstat					sys/stat.h				https://pubs.opengroup.org/onlinepubs/009696699/functions/fstat.html
+execve					process.h				http://www.qnx.com/developers/docs/qnxcar2/index.jsp?topic=%2Fcom.qnx.doc.neutrino.lib_ref%2Ftopic%2Fe%2Fexecve.html
+dup						unistd.h				https://www.geeksforgeeks.org/dup-dup2-linux-system-call/
+dup2					unistd.h				https://www.geeksforgeeks.org/dup-dup2-linux-system-call/
+pipe					unistd.h				https://www.geeksforgeeks.org/pipe-system-call/
+opendir					dirent.h 				https://pubs.opengroup.org/onlinepubs/009695399/functions/opendir.html#:~:text=The%20opendir()%20function%20shall,%7BOPEN_MAX%7D%20files%20and%20directories.
+readdir					dirent.h				https://pubs.opengroup.org/onlinepubs/7908799/xsh/readdir.html#:~:text=The%20readdir()%20function%20returns,end%20of%20the%20directory%20stream.
+closedir				dirent.h				https://pubs.opengroup.org/onlinepubs/009695399/functions/closedir.html#:~:text=The%20closedir()%20function%20shall,file%20descriptor%20shall%20be%20closed.
+isatty					unistd.h				https://man7.org/linux/man-pages/man3/isatty.3.html
+ttyname					unistd.h 				https://pubs.opengroup.org/onlinepubs/009696699/functions/ttyname.html#:~:text=The%20ttyname()%20function%20shall,is%20overwritten%20by%20each%20call.
+ttyslot					unistd.h				https://www.freebsd.org/cgi/man.cgi?query=ttyslot&sektion=3&apropos=0&manpath=FreeBSD+6.1-RELEASE
+ioctl					sys/ioctl.h 			https://www.tutorialspoint.com/unix_system_calls/ioctl.htm#:~:text=The%20ioctl()%20function%20manipulates,a%20device%2Ddependent%20request%20code.
+getenv					stdlib.h				https://www.tutorialspoint.com/c_standard_library/c_function_getenv.htm
+tcsetattr				termios.h 				https://pubs.opengroup.org/onlinepubs/009696799/functions/tcsetattr.html#:~:text=The%20tcsetattr()%20function%20shall,the%20change%20shall%20occur%20immediately.
+tcgetattr				termios.h				https://pubs.opengroup.org/onlinepubs/009696799/functions/tcgetattr.html#:~:text=The%20tcgetattr()%20operation%20is,even%20if%20they%20are%20equal.
+tgetent					term.h					https://pubs.opengroup.org/onlinepubs/7908799/xcurses/tgetent.html
+tgetflag				term.h					https://pubs.opengroup.org/onlinepubs/7908799/xcurses/tgetent.html
+tgetnum					term.h					https://pubs.opengroup.org/onlinepubs/7908799/xcurses/tgetent.html
+tgetstr					term.h					https://pubs.opengroup.org/onlinepubs/7908799/xcurses/tgetent.html
+tgoto					term.h					https://pubs.opengroup.org/onlinepubs/7908799/xcurses/tgetent.html
+tputs					term.h					https://linux.die.net/man/3/tputs
+
+NB----------->: guide for minishell
+https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf
+
+shell syntax:
+https://pubs.opengroup.org/onlinepubs/009695399/utilities/xcu_chap02.html
