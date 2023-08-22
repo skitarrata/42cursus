@@ -1,0 +1,43 @@
+:root {
+  --clr-neon: rgb(255, 255, 255);
+  --clr-bg: hsl(0, 84%, 50%);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.center {
+  min-height: 80vh;
+  display: grid;
+  /*place-items: center;*/
+  font-family:
+    Bebas Neue,
+    sans-serif;
+  color: var(--clr-neon);
+}
+
+.neon-button {
+  font-size: 4rem;
+
+  width: 20rem;
+  text-align: center;
+  display: inline-block;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--clr-neon);
+  border: var(--clr-neon) 0.1em solid;
+
+  border-radius: 0.25em;
+
+  position: relative;
+  z-index: 0;
+}
+
+.neon-button:hover,
+.neon-button:focus {
+  color: var(--clr-bg);
+  border: var(--clr-bg) 0.1em solid;
+}

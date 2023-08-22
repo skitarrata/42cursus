@@ -1,0 +1,250 @@
+.profile-content {
+  height: 80%;
+  width: 100%;
+  display: flex;
+  display: flex;
+  padding: 3rem;
+}
+
+.profile-box {
+  background-color: rgba(80, 80, 80, 0.4);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+}
+
+.profile-info {
+  flex: 4;
+  margin-right: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  overflow: auto;
+}
+
+.info-username-image {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.info-username-image > .my-dot {
+  height: 30px;
+  width: 30px;
+  border: 2px solid white;
+  top: 140px;
+  left: 115px;
+}
+
+.profile-info-img {
+  height: 170px;
+  width: 170px;
+  border-radius: 50%;
+  object-fit: cover;
+
+  border: 3px solid white;
+}
+
+.profile-info-img.sm {
+  height: 60px;
+  width: 60px;
+  border: 2px solid white;
+}
+
+.profile-info-text {
+  font-family: Bebas Neue, sans-serif;
+  font-style: italic;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  color: white;
+  font-size: 2rem;
+}
+.profile-info-stats {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-info-text.username {
+  font-size: 3rem;
+  text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+}
+
+.winslosses {
+  display: flex;
+  flex-direction: row;
+  white-space: nowrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.profile-info-submit {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.profile-info-submit .btn-home {
+  font-size: 1.2rem;
+}
+.profile-info-submit .btn-play {
+  font-size: 1rem;
+  margin-top: 1rem;
+}
+
+.last-games {
+  flex: 3;
+  margin-right: 1rem;
+  max-height: 650px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.last-games-title {
+  height: 10%;
+  display: grid;
+  place-content: center;
+}
+
+.match-list {
+  width: 100%;
+  height: 90%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.match-item {
+  border-radius: 5px;
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  padding: 0.6rem 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  font-family: Bebas Neue, sans-serif;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+  max-width: 30rem;
+  width: 95%;
+  justify-content: space-around;
+  
+}
+
+.match-item.match-win {
+  color: green
+  /* background-color: */
+}
+.match-item.match-loss {
+  
+  color: red;
+}
+
+.image-username {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.image-username.no-hover {
+  cursor: default;
+}
+
+.image-username > .my-dot {
+  top: 48px;
+  left: 40px;
+}
+
+.image-username:hover {
+  opacity: 0.8;
+}
+
+.image-username.no-hover:hover {
+  opacity: 1;
+}
+
+.match-item p {
+  margin-bottom: 0;
+}
+
+.match-score {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  font-size: 2.3rem;
+}
+
+.friend-list {
+  flex: 3;
+  color: white;
+  font-family: Bebas Neue, sans-serif;
+}
+
+.friends-items {
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  padding: 0 1rem;
+}
+
+.friend-requests {
+  max-height: 50%;
+  overflow: auto;
+}
+
+.friends-accepted {
+  flex: 1;
+  overflow: auto;
+}
+
+.friend-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 0.5rem 0;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+
+.friend-item:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.friend-item > div {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.friend-item > div:nth-child(1) {
+  justify-content: start;
+  padding-left: 1rem;
+  cursor: pointer;
+  position: relative;
+}
+
+.friend-item > div:nth-child(1) > .my-dot {
+  top: 45px;
+  left: 60px;
+}
+
+.friend-item > div:nth-child(1):hover {
+  opacity: 0.8;
+}
+
+.friend-item > div:nth-child(2) {
+  justify-content: space-evenly;
+}
+
+.friend-item p {
+  margin-bottom: 0;
+  font-size: 1.5rem;
+}
+
+.btn-home:disabled {
+  opacity: 0.8;
+}

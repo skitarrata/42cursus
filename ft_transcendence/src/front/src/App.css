@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+}
+
+body,
+#root {
+  height: 100vh;
+  overflow: hidden;
+}
+
+body {
+  background-color: rgb(0, 0, 0.7);
+}
+
+.video {
+  object-fit: cover;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -2;
+  opacity: 0.5;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.flex-col.flex-center,
+.flex-row.flex-center {
+  justify-content: center;
+}
+
+.flex-col.sp-even,
+.flex-row.sp-even {
+  justify-content: space-evenly;
+}
+
+.flex-col.sp-bet,
+.flex-row.sp-bet {
+  justify-content: space-between;
+}
+
+.flex-col.sp-around,
+.flex-row.sp-around {
+  justify-content: space-around;
+}
+
+.my-dot {
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  border: 1px solid white;
+  position: absolute;
+}
+
+.my-dot.online {
+  background-color: #2e7d32;
+}
+.my-dot.offline {
+  background-color: #d32f2f;
+}
+.my-dot.ingame {
+  background-color: #ed6c02;
+}
+
+.btn-hover-paderi:hover {
+  transition: 0.5s;
+  background-color: rgb(217, 217, 217) !important;
+}
+
+/* Sidebar chiudi */
+button.p-sidebar-close.p-sidebar-icon.p-link {
+  display: none;
+}
+
+.p-sidebar {
+  background-color: #ffffff;
+  color: #ffffff;
+  border: 0 none;
+  box-shadow: none !important;
+  /* backdrop-filter: blur(5px) !important; */
+  border-top-right-radius: 6px;
+}
+
+div#search-dialog>.p-dialog-header {
+  display: none;
+}
+
+input.p-inputtext.p-component.p-autocomplete-input.p-autocomplete-input {
+  background: rgba(0, 0, 0, 0.5) !important;
+  color: white !important;
+}
+
+div#search-dialog {
+  box-shadow: none !important;
+}
+div[id=search-dialog_content]>div {
+  background: transparent !important;
+}
+
+.card-header {
+  background: transparent !important;
+  border: 0 none;
+  color: white !important;
+}
+
+
+.chat > .card-header > .input-group {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+}
+
+.chat > .card-header > .input-group > span, 
+.chat > .card-header > .input-group > span > input {
+  width: 100% !important;
+} 
+
+#search-dialog_content {
+  background: transparent !important;
+}
+
+div#popup_menu {
+  width: auto;
+}
+
+.p-password.p-component.p-inputwrapper.p-input-icon-right.form-control.search {
+  background-color: transparent !important;
+  color: white !important;
+}
+
+input[type='text'] , input[type='password']{
+  height: 37px;
+  font-size: 16px;
+  width: 100%;
+  margin-bottom: 10px;
+  appearance: none;
+  -webkit-appearance: none;
+  background: #fff;
+  border: 1px solid #d9d9d9;
+  border-top: 1px solid #c0c0c0;
+  /* border-radius: 2px; */
+  padding: 0 8px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}

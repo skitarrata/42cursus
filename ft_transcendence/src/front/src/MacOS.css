@@ -1,0 +1,184 @@
+body {
+    background-image: url('/public/bg.jpeg') !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+}
+
+.dock-demo .dock-window {
+    width: 100% !important;
+    height: 450px !important;
+    position: relative !important;
+}
+
+.dock-demo .p-dock {
+    z-index: 1000 !important;
+}
+
+.p-menubar-end>.pi {
+    padding: 7px !important;
+}
+
+.dock-demo .dock-advanced .p-dialog-mask,
+.dock-demo .dock-advanced .p-galleria-mask,
+.dock-demo .dock-advanced .p-galleria-mask .p-galleria-item-nav,
+.dock-demo .dock-advanced .p-toast {
+    position: absolute !important;
+}
+
+.dock-demo .dock-advanced .p-dialog .p-dialog-header {
+    padding: 0.2rem !important;
+}
+
+.dock-demo .dock-advanced .p-dialog .p-dialog-content {
+    padding: 0 !important;
+}
+
+.dock-demo .dock-advanced .p-dialog p {
+    margin-top: 0 !important;
+}
+
+.dock-demo .dock-advanced .p-dialog .p-terminal {
+    background-color: #212121 !important;
+    color: #fff !important;
+    border: 0 none !important;
+    min-height: 18rem !important;
+    height: 100% !important;
+}
+
+.dock-demo .dock-advanced .p-dialog .p-terminal .p-terminal-command {
+    color: #80cbc4 !important;
+}
+
+.dock-demo .dock-advanced .p-dialog .p-terminal .p-terminal-prompt {
+    color: #ffd54f !important;
+}
+
+.dock-demo .dock-advanced .p-dialog .p-terminal .p-terminal-response {
+    color: #9fa8da !important;
+}
+
+.dock-demo .dock-advanced .p-dialog .p-tree {
+    height: 100% !important;
+    border-radius: 0 !important;
+    border-left-width: 0 !important;
+    border-right-width: 0 !important;
+    border-bottom-width: 0 !important;
+}
+
+.dock-demo .dock-advanced .p-toast {
+    top: 20px !important;
+}
+
+.dock-demo .p-menubar {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    border-radius: 0 !important;
+}
+
+.dock-demo .p-menubar .menubar-root {
+    font-weight: bold !important;
+    padding: 0 1rem !important;
+}
+
+.dock-demo .p-menubar .p-menuitem-link {
+    padding: 0.5rem 0.75rem !important;
+}
+
+.dock-demo .p-menubar .p-menubar-root-list>.p-menuitem>.p-menuitem-link {
+    padding: 0.5rem 0.75rem !important;
+}
+
+.dock-demo .p-menubar .p-menubar-root-list>.p-menuitem>.p-menuitem-link>.p-submenu-icon {
+    display: none !important;
+}
+
+.dock-demo .p-menubar .p-menubar-end span,
+.dock-demo .p-menubar .p-menubar-end i {
+    padding: 0 0.75rem !important;
+}
+
+.dark-tooltip .p-tooltip .p-tooltip-arrow {
+    border-top-color: var(--surface-900) !important;
+}
+
+.dark-tooltip .p-tooltip .p-tooltip-text {
+    background-color: var(--surface-900) !important;
+}
+
+
+/* DAJE */
+
+.p-dialog .p-dialog-header {
+    border-bottom: 0 none;
+    background: #ffffff;
+    color: #343a40;
+    padding: 0.5rem;
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+}
+
+svg.p-icon.p-dialog-header-close-icon {
+    display: none;
+}
+
+.p-dialog .p-dialog-header .p-dialog-header-icon {
+    width: 1rem !important;
+    height: 1rem !important;
+    color: red !important;
+    border: 0 none;
+    background: red !important;
+    border-radius: 50%;
+    transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+    margin-right: 0.5rem;
+}
+
+.p-dialog-header-icon.p-dialog-header-maximize.p-link {
+    background: darkorange !important;
+    color: darkorange !important;
+}
+
+.p-dialog .p-dialog-header {
+    border-bottom: 0 none;
+    background: #0000002e !important;
+    color: white !important;
+    padding: 1.5rem;
+    /* backdrop-filter: blur(25px) !important; */
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+}
+
+.p-dialog {
+    border-radius: 6px;
+    box-shadow: 1px 1px 20px 0px rgb(0 0 0 / 39%) !important;
+    border: 0 none;
+    backdrop-filter: blur(25px) !important;
+}
+
+.p-dialog .p-dialog-content {
+    background: #0000002e !important;
+    color: white !important;
+    padding: 0px !important;
+
+    /* backdrop-filter: blur(25px) !important; */
+}
+
+.dialog-content:last-of-type {
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+    overflow: hidden;
+}
+
+.p-menubar {
+    border-radius: 0px !important;
+}
+
+.p-dialog .p-dialog-footer {
+    border-top: 0 none;
+    background: #0000002e !important;
+    color: white !important;
+    padding: 0.5rem;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+    /* backdrop-filter: blur(25px) !important; */
+    padding: 5px !important;
+}
